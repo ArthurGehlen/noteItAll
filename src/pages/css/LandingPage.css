@@ -1,3 +1,13 @@
+.hero_section,
+.benefits_wrapper,
+.illustration,
+.mini_roadmap_wrapper,
+.call_to_action {
+  width: 80vw;
+  margin: 3.5rem auto;
+  text-align: center;
+}
+
 .landing_header {
   height: 8rem;
   padding: 1.25rem clamp(0.4rem, 4.9861vw + -0.4896rem, 2rem);
@@ -50,33 +60,68 @@
   border-radius: 0 0.4rem 0.4rem 0;
 }
 
-.hero_section {
-    width: 80vw;
-    margin: 2rem auto;
-    text-align: center;
-}
-
-.hero_section h2 {
-    font-size: clamp(2.25rem, 4.9861vw + -0.4896rem, 4rem);
-    font-style: italic;
-    font-weight: 600;
-    color: #111827;
+.hero_section h2,
+.call_to_action h2 {
+  font-size: clamp(2.25rem, 4.9861vw + -0.4896rem, 4rem);
+  font-style: italic;
+  font-weight: 600;
+  color: #111827;
 }
 
 .hero_section p {
-    color: #6B7280;
-    font-size: clamp(1.25rem, 4.9861vw + -0.4896rem, 2rem);
-    font-weight: 600;
-    width: fit-content;
-    margin: 1rem auto;
+  color: #6b7280;
+  font-size: clamp(1.25rem, 4.9861vw + -0.4896rem, 2rem);
+  font-weight: 600;
+  width: fit-content;
+  margin: 1rem auto;
 }
 
 .call_button {
-    background-color: #3b82f6;
-    padding: 1rem 4rem;
-    font-size: clamp(1rem, 4.9861vw + -0.4896rem, 1.5rem);
-    border-radius: .4rem;
-    border: none;
-    color: #FFF;
-    cursor: pointer;
+  background-color: #3b82f6;
+  padding: 1rem 2rem;
+  font-size: clamp(1rem, 4.9861vw + -0.4896rem, 1.5rem);
+  border-radius: 0.4rem;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.benefits_wrapper h2,
+.mini_roadmap_wrapper h2 {
+  font-size: clamp(2.25rem, 4.9861vw + -0.4896rem, 3rem);
+  margin-bottom: 2rem;
+  font-weight: 900;
+}
+
+.benefits_container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.mini_roadmap_container {
+  height: fit-content;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.landing_footer {
+  background-color: #3b82f6;
+  color: #fff;
+  padding: 2rem;
+}
+
+.infos_footer {
+  display: flex;
+}
+
+.landing_footer a {
+  width: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.4s ease transform;
 }

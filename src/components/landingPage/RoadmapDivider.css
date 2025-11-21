@@ -1,0 +1,21 @@
+.roadmap_divider {
+  height: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.divider {
+  height: 0.8rem;
+  width: 1.35rem;
+  background-color: #d9d9d9;
+}
+
+@media screen and (max-width: 476px) {
+  .roadmap_divider {
+    display: block;
+  }
+  .divider:not(:first-child) {
+    margin-top: 0.8rem;
+  }
+}

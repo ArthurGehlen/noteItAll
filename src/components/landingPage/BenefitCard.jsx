@@ -1,4 +1,7 @@
-const BenefitContainer = ({
+// Utils
+import "./BenefitCard.css";
+
+const BenefitCard = ({
   img,
   benefitTitle,
   text,
@@ -18,4 +21,4 @@ const BenefitContainer = ({
   );
 };
 
-export default BenefitContainer;
+export default BenefitCard;

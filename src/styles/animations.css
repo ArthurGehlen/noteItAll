@@ -1,0 +1,5 @@
+.landing_footer a:hover,
+.benefit_card:hover,
+.roadmap_card:hover {
+  transform: scale(1.1, 1.1);
+}
