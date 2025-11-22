@@ -33,8 +33,8 @@ const LandingPage = () => {
           <h1>NoteItAll</h1>
         </div>
         <div className="user_options">
-          <button>Entrar</button>
-          <button>Criar Conta</button>
+          <Link to="/login">Entrar</Link>
+          <Link to="/signup">Criar Conta</Link>
         </div>
       </header>
       <div className="hero_section">
@@ -110,7 +110,7 @@ const LandingPage = () => {
         <div className="call_to_action">
           <h2>Pronto para anotar tudo que passa pela sua cabeça?</h2>
 
-          <button className="call_button">Criar conta Grátis</button>
+          <Link to="/signup" className="call_button">Criar conta Grátis</Link>
         </div>
       </div>
 

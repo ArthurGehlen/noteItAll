@@ -37,7 +37,7 @@
   gap: 0.1rem;
 }
 
-.user_options button {
+.user_options a {
   background-color: #3b82f6;
   color: #fff;
   border: none;
@@ -47,16 +47,16 @@
   min-width: fit-content;
 }
 
-.user_options button:hover,
-.call_button:hover {
+.user_options a:hover,
+.a:hover {
   opacity: 0.8;
 }
 
-.user_options button:first-child {
+.user_options a:first-child {
   border-radius: 0.4rem 0 0 0.4rem;
 }
 
-.user_options button:last-child {
+.user_options a:last-child {
   border-radius: 0 0.4rem 0.4rem 0;
 }
 
