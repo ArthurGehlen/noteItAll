@@ -102,6 +102,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
+  transition: .4s ease border;
 }
 
 .auth_social_btn:hover {

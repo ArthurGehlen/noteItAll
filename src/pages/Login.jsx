@@ -1,5 +1,6 @@
 // Hooks
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
 
 // Images
 import logo from "../assets/logo.svg";
@@ -8,12 +9,40 @@ import google_icon from "../assets/google_icon.svg";
 // Utils
 import "./css/AccountPage.css";
 import "../styles/globals.css";
+import { auth } from "../lib/firebase";
+
+// Components
+import Message from "../components/common/Message";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
   document.title = "NoteItAll - Login";
 
-  const login_action = (e) => {
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+
+  const login_action = async (e) => {
     e.preventDefault();
+
+    const email = emailRef.current.value.trim();
+    const password = passwordRef.current.value.trim();
+
+    if (!email || !password) {
+      setMessageType("error");
+      setMessage("Preencha tudo.");
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/home");
+    } catch (error) {
+      setMessageType("error");
+      setMessage(error);
+    }
   };
 
   return (
@@ -28,11 +57,21 @@ const Login = () => {
         <form onSubmit={login_action}>
           <div className="auth_input_wrapper">
             <label htmlFor="login_email">Edereço de email</label>
-            <input type="email" name="login_email" id="login_email" />
+            <input
+              type="email"
+              name="login_email"
+              id="login_email"
+              ref={emailRef}
+            />
           </div>
           <div className="auth_input_wrapper">
             <label htmlFor="login_password">Senha</label>
-            <input type="password" name="login_password" id="login_password" />
+            <input
+              type="password"
+              name="login_password"
+              id="login_password"
+              ref={passwordRef}
+            />
           </div>
           <button className="submit_form_btn" type="submit">
             Entrar
