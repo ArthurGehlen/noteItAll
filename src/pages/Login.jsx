@@ -47,6 +47,9 @@ const Login = () => {
 
   return (
     <div className="auth_page">
+      {message && messageType && (
+        <Message type={messageType} message={message} />
+      )}
       <div className="landing_logo">
         <img src={logo} alt="Logo" />
         <h1>NoteItAll</h1>

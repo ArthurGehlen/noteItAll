@@ -44,13 +44,13 @@ const Signup = () => {
     const password = passwordRef.current.value.trim();
     const confirmPassword = confirmPasswordRef.current.value.trim();
 
-    if (!email || !username || !password || confirmPassword) {
+    if (!email || !username || !password || !confirmPassword) {
       setMessageType("error");
       setMessage("Preencha tudo!");
       return;
     }
 
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       setMessageType("error");
       setMessage("As senhas não coincidem!");
       return;
@@ -59,7 +59,7 @@ const Signup = () => {
     try {
       const cred = await createUserWithEmailAndPassword(auth, email, password);
 
-      await setDoc((db, "users", cred.user.uid), {
+      await setDoc(doc(db, "users", cred.user.uid), {
         username,
         email,
         createdAt: Date.now(),
@@ -67,10 +67,10 @@ const Signup = () => {
 
       await sendEmailVerification(cred.user);
 
-      navigate("/verify-email"); // TODO: criar página home e página de verificação de email
+      navigate("/verify-email");
     } catch (error) {
       setMessageType("error");
-      setMessage(error);
+      setMessage(error.message);
     }
   };
 

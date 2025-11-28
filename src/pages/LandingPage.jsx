@@ -24,6 +24,8 @@ import BenefitCard from "../components/landingPage/BenefitCard";
 import RoadmapCard from "../components/landingPage/RoadmapCard";
 import RoadmapDivider from "../components/landingPage/RoadmapDivider";
 
+// por hora finalizado, NÃO MEXER MAIS :)
+
 const LandingPage = () => {
   return (
     <>

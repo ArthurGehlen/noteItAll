@@ -102,7 +102,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  transition: .4s ease border;
+  transition: 0.4s ease border;
 }
 
 .auth_social_btn:hover {
@@ -115,4 +115,17 @@
 
 .auth_social_btn img {
   max-width: 1.5rem;
+}
+
+.verify_email_container {
+  min-width: 22rem;
+  max-width: 100%;
+  padding: 2rem;
+  height: 16rem;
+}
+
+.verify_email_container p {
+  line-height: 1.75rem;
+  font-weight: 400;
+  text-align: center;
 }
