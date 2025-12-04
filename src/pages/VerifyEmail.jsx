@@ -51,14 +51,20 @@ function VerifyEmail() {
   return (
     <div className="auth_page">
       {message && <Message type={success ? success : error} />}
-      <div className="verify_email_container">
+      <div className="auth_container">
         <h2>Verifique seu email</h2>
         <p>
           Enviamos um email para: <strong>{user.email}</strong>
         </p>
-        <p>A página será atualizada automaticamente quando você confirmar.</p>
+        <p style={{ marginTop: "2rem" }}>
+          *A página será atualizada automaticamente quando você confirmar.
+        </p>
 
-        <button onClick={resend_email} disabled={resending}>
+        <button
+          onClick={resend_email}
+          disabled={resending}
+          className="resend_btn"
+        >
           {resending ? "Enviando..." : "Reenviar email de verificação"}
         </button>
       </div>

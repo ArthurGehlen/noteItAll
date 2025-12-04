@@ -1,39 +1,29 @@
 // Utils
 import { useAuth } from "../context/AuthProvider";
 import "./css/Home.css";
-import { auth } from "../lib/firebase";
 
 // Hooks
-import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 function Home() {
   document.title = "NoteItAll - Home";
 
-  const { user } = useAuth();
+  const { logout, profile } = useAuth();
+  const [userData, setUserData] = useState(null); // guarda os dados completos do usuário, no momento não irei usar isso mas futuramente pode ser útil :D
   const [username, setUsername] = useState("");
 
   useEffect(() => {
-    const loadUserData = async () => {
-      if (!user) return;
-    };
-
-    loadUserData();
-  }, [user]);
-
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    await signOut(auth);
-    navigate("/login");
-  };
+    if (profile && profile.username) {
+      setUsername(profile.username);
+      setUserData(profile);
+    }
+  }, [profile]);
 
   return (
     <div>
-      <h1>Bem-vindo, {user?.email}</h1> {/* por hora só puxa o email, mais pra frente puxar o username */}
+      <h1>Bem-vindo, {username}</h1>
 
-      <button onClick={handleLogout}>Sair</button>
+      <button onClick={logout}>Sair</button>
     </div>
   );
 }

@@ -92,7 +92,7 @@
   color: #000;
 }
 
-.auth_social_btn {
+.auth_social_btn, .resend_btn {
   margin: 2rem auto;
   width: 100%;
   background-color: #fff;
@@ -105,7 +105,7 @@
   transition: 0.4s ease border;
 }
 
-.auth_social_btn:hover {
+.auth_social_btn:hover, .resend_btn:hover {
   border: 1px solid #333;
 }
 

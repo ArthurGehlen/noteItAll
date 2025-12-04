@@ -1,6 +1,6 @@
 // Hooks
 import { Link, useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Images
 import logo from "../assets/logo.svg";
@@ -9,73 +9,79 @@ import google_icon from "../assets/google_icon.svg";
 // Utils
 import "./css/AccountPage.css";
 import "../styles/globals.css";
-import { auth } from "../lib/firebase";
+import { useAuth } from "../context/AuthProvider";
 
 // Components
 import Message from "../components/common/Message";
-import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
   document.title = "NoteItAll - Login";
 
   const emailRef = useRef();
   const passwordRef = useRef();
+
+  /*
+    NÃO DEIXAR CONSOLE.LOG() NO CÓDIGO :D
+  */
+
+  const { login_action, auth_with_google } = useAuth();
   const navigate = useNavigate();
+
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
 
-  const login_action = async (e) => {
+  // mesma lógica do signup :D
+  const handle_submit = async (e) => {
     e.preventDefault();
 
     const email = emailRef.current.value.trim();
     const password = passwordRef.current.value.trim();
 
-    if (!email || !password) {
+    const result = await login_action(email, password);
+
+    if (!result.ok) {
       setMessageType("error");
-      setMessage("Preencha tudo.");
+      setMessage(result.error);
       return;
     }
 
+    navigate("/home");
+  };
+
+  const handle_google_login = async () => {
+    // try/catch é considerado gambiarra??
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await auth_with_google();
       navigate("/home");
-    } catch (error) {
+    } catch (erro) {
       setMessageType("error");
-      setMessage(error);
+      setMessage(erro);
     }
   };
 
   return (
     <div className="auth_page">
-      {message && messageType && (
-        <Message type={messageType} message={message} />
-      )}
+      {message && <Message type={messageType} message={message} />}
+
       <div className="landing_logo">
         <img src={logo} alt="Logo" />
         <h1>NoteItAll</h1>
       </div>
+
       <div className="auth_container">
         <h2>Login</h2>
 
-        <form onSubmit={login_action}>
+        <form onSubmit={handle_submit}>
           <div className="auth_input_wrapper">
-            <label htmlFor="login_email">Edereço de email</label>
-            <input
-              type="email"
-              name="login_email"
-              id="login_email"
-              ref={emailRef}
-            />
+            <label>Email</label>
+            <input type="email" ref={emailRef} />
           </div>
+
           <div className="auth_input_wrapper">
-            <label htmlFor="login_password">Senha</label>
-            <input
-              type="password"
-              name="login_password"
-              id="login_password"
-              ref={passwordRef}
-            />
+            <label>Senha</label>
+            <input type="password" ref={passwordRef} />
           </div>
+
           <button className="submit_form_btn" type="submit">
             Entrar
           </button>
@@ -91,7 +97,7 @@ const Login = () => {
           Não possui uma conta? <Link to="/signup">Crie uma</Link>
         </p>
 
-        <button className="auth_social_btn">
+        <button className="auth_social_btn" onClick={handle_google_login}>
           <img src={google_icon} alt="Icon" />
           <span>Entre com o Google</span>
         </button>

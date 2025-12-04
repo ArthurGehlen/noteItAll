@@ -19,24 +19,22 @@ import EmailVerifiedRoute from "./routes/EmailVerifiedRoute"; // proteger as rot
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route
-            path="/home" // todas as rotas do site tem que seguir esse mesmo padrão de rota
-            element={
-              <PrivateRoute>
-                <EmailVerifiedRoute>
-                  <Home />
-                </EmailVerifiedRoute>
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route
+          path="/home" // todas as rotas do site tem que seguir esse mesmo padrão de rota
+          element={
+            <PrivateRoute>
+              <EmailVerifiedRoute>
+                <Home />
+              </EmailVerifiedRoute>
+            </PrivateRoute>
+          }
+        />
+      </Routes>
     </>
   );
 }

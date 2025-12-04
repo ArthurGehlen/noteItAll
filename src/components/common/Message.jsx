@@ -7,7 +7,7 @@ import "./Message.css";
 const Message = ({ message, type }) => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // top 5 coisas q vc consegue fazer com js *-*
+  // top 5 coisas q vc consegue fazer com js :D
   useEffect(() => {
     if (!message) return;
 

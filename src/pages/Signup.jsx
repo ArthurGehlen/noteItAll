@@ -1,135 +1,85 @@
 // Hooks
-import { Link } from "react-router-dom";
-import { useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-} from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { useState } from "react";
-
-// Images
-import logo from "../assets/logo.svg";
-import google_icon from "../assets/google_icon.svg";
+import { useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 // Components
 import Message from "../components/common/Message";
 
 // Utils
+import { useAuth } from "../context/AuthProvider";
 import "./css/AccountPage.css";
-import "../styles/globals.css";
-import { auth, db } from "../lib/firebase";
+
+// Images
+import logo from "../assets/logo.svg";
+import google_icon from "../assets/google_icon.svg";
 
 const Signup = () => {
-  document.title = "NoteItAll - Signup";
+  const { signup_action } = useAuth();
 
-  /*
-    LEMBRAR DE NÃO DEIXAR CONSOLE.LOG() NO CÓDIGO :)
-  */
-
-  const [message, setMessage] = useState();
+  const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+
+  /* MANTER EM useRef :) */
   const emailRef = useRef();
   const usernameRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
+
   const navigate = useNavigate();
 
-  const signup_action = async (e) => {
+  const handle_submit = async (e) => {
     e.preventDefault();
 
-    const email = emailRef.current.value.trim();
-    const username = usernameRef.current.value.trim();
-    const password = passwordRef.current.value.trim();
-    const confirmPassword = confirmPasswordRef.current.value.trim();
+    // sou um genio kkkkk
+    const result = await signup_action(
+      emailRef.current.value,
+      usernameRef.current.value,
+      passwordRef.current.value,
+      confirmPasswordRef.current.value
+    );
 
-    if (!email || !username || !password || !confirmPassword) {
+    if (!result.ok) {
       setMessageType("error");
-      setMessage("Preencha tudo!");
+      setMessage(result.error);
       return;
     }
 
-    if (password !== confirmPassword) {
-      setMessageType("error");
-      setMessage("As senhas não coincidem!");
-      return;
-    }
-
-    try {
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
-
-      await setDoc(doc(db, "users", cred.user.uid), {
-        username,
-        email,
-        createdAt: Date.now(),
-      });
-
-      await sendEmailVerification(cred.user);
-
-      navigate("/verify-email");
-    } catch (error) {
-      setMessageType("error");
-      setMessage(error.message);
-    }
+    navigate("/verify-email");
   };
 
   return (
     <div className="auth_page">
-      {message && messageType && (
-        <Message type={messageType} message={message} />
-      )}
+      {message && <Message type={messageType} message={message} />}
+
       <div className="landing_logo">
         <img src={logo} alt="Logo" />
         <h1>NoteItAll</h1>
       </div>
+
       <div className="auth_container">
         <h2>Signup</h2>
 
-        <form onSubmit={signup_action}>
+        <form onSubmit={handle_submit}>
           <div className="auth_input_wrapper">
-            <label htmlFor="signup_email">Edereço de email</label>
-            <input
-              type="email"
-              name="signup_email"
-              id="signup_email"
-              placeholder="exemplo@gmail.com"
-              ref={emailRef}
-            />
+            <label>Email</label>
+            <input type="email" ref={emailRef} />
           </div>
+
           <div className="auth_input_wrapper">
-            <label htmlFor="username">Nome de usuário</label>
-            <input
-              type="text"
-              name="username"
-              id="username"
-              minLength={3}
-              placeholder="Mínimo de 3 caracteres"
-              autoComplete="off"
-              ref={usernameRef}
-            />
+            <label>Nome de usuário</label>
+            <input type="text" minLength={3} ref={usernameRef} />
           </div>
+
           <div className="auth_input_wrapper">
-            <label htmlFor="signup_password">Senha</label>
-            <input
-              type="password"
-              name="signup_password"
-              id="signup_password"
-              minLength={8}
-              placeholder="Mínimo de 8 caracteres"
-              ref={passwordRef}
-            />
+            <label>Senha</label>
+            <input type="password" minLength={8} ref={passwordRef} />
           </div>
+
           <div className="auth_input_wrapper">
-            <label htmlFor="confirm_password">Confirme sua senha</label>
-            <input
-              type="password"
-              name="confirm_password"
-              id="confirm_password"
-              ref={confirmPasswordRef}
-              placeholder="Confirme sua senha"
-            />
+            <label>Confirmar senha</label>
+            <input type="password" ref={confirmPasswordRef} />
           </div>
+
           <button className="submit_form_btn" type="submit">
             Criar Conta
           </button>
@@ -142,12 +92,12 @@ const Signup = () => {
         </div>
 
         <p className="account_link">
-          Já possui uma conta? <Link to="/login">Entre</Link>
+          Já possui uma conta? <Link to="/login">Entrar</Link>
         </p>
 
         <button className="auth_social_btn">
-          <img src={google_icon} alt="Icon" />
-          <span>Entre com o Google</span>
+          <img src={google_icon} alt="icon" />
+          <span>Entrar com Google</span>
         </button>
       </div>
     </div>
