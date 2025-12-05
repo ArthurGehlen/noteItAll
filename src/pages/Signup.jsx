@@ -97,7 +97,7 @@ const Signup = () => {
 
         <button className="auth_social_btn">
           <img src={google_icon} alt="icon" />
-          <span>Entrar com Google</span>
+          <span>Entre com o Google</span>
         </button>
       </div>
     </div>
