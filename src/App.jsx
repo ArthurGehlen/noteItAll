@@ -7,6 +7,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import VerifyEmail from "./pages/VerifyEmail";
 import Home from "./pages/Home";
+import MyNotes from "./pages/MyNotes";
+import Favorites from "./pages/Favorites";
 
 // Routes
 import PrivateRoute from "./routes/PrivateRoute";
@@ -30,6 +32,26 @@ function App() {
             <PrivateRoute>
               <EmailVerifiedRoute>
                 <Home />
+              </EmailVerifiedRoute>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/my-notes"
+          element={
+            <PrivateRoute>
+              <EmailVerifiedRoute>
+                <MyNotes />
+              </EmailVerifiedRoute>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/favorites"
+          element={
+            <PrivateRoute>
+              <EmailVerifiedRoute>
+                <Favorites />
               </EmailVerifiedRoute>
             </PrivateRoute>
           }

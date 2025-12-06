@@ -12,7 +12,7 @@ import Sidebar from "../components/UI/Sidebar";
 function Home() {
   document.title = "NoteItAll - Home";
 
-  const { logout, profile } = useAuth();
+  const { profile } = useAuth();
   const [username, setUsername] = useState("");
 
   useEffect(() => {
@@ -23,7 +23,7 @@ function Home() {
 
   return (
     <ContentPage>
-      <Sidebar />
+      <Sidebar current_link="Home" />
     </ContentPage>
   );
 }
