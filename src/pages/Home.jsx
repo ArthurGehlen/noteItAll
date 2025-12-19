@@ -17,7 +17,7 @@ function Home() {
 
   useEffect(() => {
     if (profile && profile.username) {
-      setUsername(profile.username);
+      setUsername(profile.username); // talvez mudar isso aqui... não sei se faz sentido armazenar o username no useState
     }
   }, [profile]);
 

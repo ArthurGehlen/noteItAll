@@ -6,11 +6,16 @@
   flex-direction: column;
   justify-content: space-between;
   grid-area: sidebar;
-  overflow: hidden;
+  max-width: 100%;
+  position: relative;
 }
 
 .sidebar img:not(.sidebar_logo img) {
   max-width: 1.4rem;
+}
+
+.home_logo {
+  max-width: 1.2rem !important;
 }
 
 .sidebar_logo {
@@ -50,6 +55,14 @@
   width: 100%;
 }
 
+.sidebar_links a:focus {
+  outline: none;
+}
+
+.sidebar_links a:focus::before {
+  width: 100%;
+}
+
 .sidebar_links a::before,
 .active_link::before {
   content: "";
@@ -62,11 +75,11 @@
 }
 
 .sidebar_links a::before {
-    width: 0%;
+  width: 0%;
 }
 
 .active_link::before {
-    width: 100% !important;
+  width: 100% !important;
 }
 
 .logout {
@@ -89,4 +102,16 @@
 
 .logout:hover {
   background-color: #d41212;
+}
+
+.toggle_sidebar_btn {
+  position: absolute;
+  top: 50%;
+  right: calc(-3.5rem / 2);
+  background-color: blue;
+  height: 3.5rem;
+  width: 3.5rem;
+  border: none;
+  border-radius: 50%;
+  padding: 1rem;
 }

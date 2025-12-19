@@ -38,12 +38,24 @@ const Sidebar = ({ current_link }) => {
                 to={link.path}
                 className={current_link == link.link_name ? "active_link" : ""}
               >
-                {link.link_name} <img src={link.img} alt="Icon" />
+                {link.link_name}{" "}
+                <img
+                  src={link.img}
+                  className={`${link.link_name
+                    .toLowerCase()
+                    .replace(/\s+/g, "_")}_logo`}
+                  alt={`${link.link_name} Icon`}
+                />
               </Link>
             </li>
           ))}
         </ul>
       </header>
+
+      {/* na hora do design eu n pensei nisso kkkkk */}
+      <button className="toggle_sidebar_btn">
+
+      </button>
 
       <button onClick={logout} className="logout">
         Logout
