@@ -2,15 +2,15 @@
 import "./css/MyNotes.css";
 
 // Components
-import ContentPage from "../components/UI/ContentPage";
+import MainComponent from "../components/UI/MainComponent";
 import Sidebar from "../components/UI/Sidebar";
 
 const MyNotes = () => {
   return (
-    <ContentPage> 
-        <Sidebar current_link="Minhas Notas" />
-    </ContentPage>
-  )
+    <MainComponent>
+      <Sidebar current_link="Minhas Notas" />
+    </MainComponent>
+  );
 }
 
 export default MyNotes

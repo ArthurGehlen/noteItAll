@@ -1,0 +1,18 @@
+.main_component {
+  min-height: 100dvh;
+  max-width: 100vw;
+  background-color: #f9fafb;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "sidebar main";
+  position: relative;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 618px) {
+  .main_component {
+    grid-template-columns: 1fr;
+    grid-template-areas: "main";
+    overflow: visible;
+  }
+}

@@ -6,7 +6,8 @@ import "./css/Home.css";
 import { useState, useEffect } from "react";
 
 // Components
-import ContentPage from "../components/UI/ContentPage";
+import MainComponent from "../components/UI/MainComponent";
+import ContentComponent from "../components/UI/ContentComponent";
 import Sidebar from "../components/UI/Sidebar";
 
 function Home() {
@@ -22,9 +23,12 @@ function Home() {
   }, [profile]);
 
   return (
-    <ContentPage>
+    <MainComponent>
       <Sidebar current_link="Home" />
-    </ContentPage>
+      <ContentComponent>
+        <p>aaaaaa</p>dasdasd
+      </ContentComponent>
+    </MainComponent>
   );
 }
 

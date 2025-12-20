@@ -2,14 +2,14 @@
 import "./css/Favorites.css";
 
 // Components
-import ContentPage from "../components/UI/ContentPage";
+import MainComponent from "../components/UI/MainComponent";
 import Sidebar from "../components/UI/Sidebar";
 
 const Favorites = () => {
   return (
-    <ContentPage>
+    <MainComponent>
       <Sidebar current_link="Favoritos" />
-    </ContentPage>
+    </MainComponent>
   );
 };
 

@@ -1,4 +1,5 @@
-.sidebar {
+.sidebar,
+.sidebar_hidden {
   background-color: #1f2937;
   color: #fff;
   padding: 2.5rem 1.5rem;
@@ -6,19 +7,44 @@
   flex-direction: column;
   justify-content: space-between;
   grid-area: sidebar;
-  max-width: 100%;
   position: relative;
+  transition: 0.4s ease max-width;
+  width: 15rem;
+  max-width: 100%;
+  z-index: auto;
+}
+
+/* escondendo os textos da sidebar */
+.sidebar_hidden {
+  padding: 2.5rem 1rem;
+  width: 5rem;
+}
+
+.sidebar_hidden span,
+.sidebar_hidden h2 {
+  display: none;
 }
 
 .sidebar img:not(.sidebar_logo img) {
   max-width: 1.4rem;
 }
 
+.sidebar_hidden .toggle_sidebar_btn img {
+  transform: rotate(-180deg);
+}
+
+.sidebar_hidden img:not(.sidebar_logo img) {
+  max-width: 1.8rem;
+}
+
+/* AQUI termina a sidebar_hidden */
+
 .home_logo {
   max-width: 1.2rem !important;
 }
 
 .sidebar_logo {
+  width: 100%;
   display: flex;
   align-items: center;
 }
@@ -29,7 +55,8 @@
 }
 
 .sidebar_logo img {
-  max-width: 3rem;
+  width: 3rem;
+  max-width: 100%;
 }
 
 .sidebar_links {
@@ -43,12 +70,15 @@
 
 .sidebar_links a {
   color: #fff;
-  font-size: 1.2rem;
   position: relative;
   text-align: center;
   display: flex;
   align-items: center;
   gap: 0.4rem;
+}
+
+.sidebar_links a span {
+  font-size: 1.2rem;
 }
 
 .sidebar_links a:hover::before {
@@ -79,7 +109,7 @@
 }
 
 .active_link::before {
-  width: 100% !important;
+  width: 100% !important; /* NÃO REMOVER O !important*/
 }
 
 .logout {
@@ -108,10 +138,47 @@
   position: absolute;
   top: 50%;
   right: calc(-3.5rem / 2);
-  background-color: blue;
+  transform: translateY(-50%);
+  background-color: hsl(0, 0%, 95%);
+  box-shadow: 5px 0px 15px 0px rgba(0, 0, 0, 0.35);
   height: 3.5rem;
   width: 3.5rem;
   border: none;
   border-radius: 50%;
-  padding: 1rem;
+  padding: 0.6rem;
+}
+
+.toggle_sidebar_btn:hover {
+  background-color: hsl(0, 0%, 85%);
+}
+
+.toggle_sidebar_btn img {
+  min-width: 100%;
+  transition: 0.4s ease transform;
+}
+
+@media screen and (max-width: 618px) {
+  .sidebar,
+  .sidebar_hidden {
+    grid-area: unset;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100dvh;
+  }
+
+  .sidebar {
+    width: 100vw;
+    z-index: 3;
+  }
+
+  .sidebar_hidden {
+    width: 5rem;
+    z-index: 3;
+  }
+
+  .toggle_sidebar_btn {
+    right: 1rem;
+    z-index: 4;
+  }
 }
