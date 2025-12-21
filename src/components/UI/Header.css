@@ -1,0 +1,26 @@
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  height: fit-content;
+  background: linear-gradient(#93c5fd 0%, #c7d2fe 90%);
+  border-radius: 0.6rem;
+}
+
+.user_area_header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.user_area_header img {
+  border-radius: 50%;
+  max-width: 4rem;
+}
+
+.user_area_header h2 {
+  font-size: 1.6rem;
+  color: #fff;
+  font-weight: 400;
+}

@@ -9,12 +9,15 @@ import App from "./App.jsx";
 // Utils
 import "./index.css";
 import { AuthProvider } from "./context/AuthProvider.jsx";
+import { PreferencesProvider } from "./context/PreferencesProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <PreferencesProvider>
+          <App />
+        </PreferencesProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>

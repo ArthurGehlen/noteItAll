@@ -1,11 +1,13 @@
 .content_component {
   grid-area: main;
+  padding: 2rem;
 }
 
 @media screen and (max-width: 618px) {
   .content_component {
     position: relative;
-    padding-left: 5rem;
+    padding: 1rem;
+    padding-left: 6rem;
     z-index: 1;
   }
 }

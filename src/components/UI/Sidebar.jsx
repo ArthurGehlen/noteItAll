@@ -1,10 +1,11 @@
 // Hooks
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 // Utils
 import "./Sidebar.css";
 import { useAuth } from "../../context/AuthProvider";
+import { usePreference } from "../../context/PreferencesProvider";
 
 // Images
 import logo from "../../assets/logo.svg";
@@ -22,18 +23,29 @@ const links = [
   { id: 3, link_name: "Favoritos", path: "/favorites", img: favorites_icon },
 ];
 
+// SIDEBAR FINALIZADA NÃO MEXER MAIS :)
+
 const Sidebar = ({ current_link }) => {
   const { logout } = useAuth();
-  const [isSidebarActive, setIsSidebarActive] = useState(true);
+  const { isSidebarActiveGlobal, setIsSidebarActiveGlobal } = usePreference();
 
-  const screen_width = window.innerWidth;
-
+  // é... o site funciona melhor em desktop
+  // mas acho q ficou bom :)
   useEffect(() => {
-    if (screen_width <= 618) setIsSidebarActive(false);
+    const handleResize = () => {
+      if (window.innerWidth <= 618) {
+        setIsSidebarActiveGlobal(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize); // gracias stackOverflow :D
+
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
-    <div className={isSidebarActive ? "sidebar" : "sidebar_hidden"}>
+    <div className={isSidebarActiveGlobal ? "sidebar" : "sidebar_hidden"}>
       <header className="sidebar_header">
         <div className="sidebar_logo">
           <img src={logo} alt="Logo" />
@@ -64,13 +76,13 @@ const Sidebar = ({ current_link }) => {
       {/* na hora do design eu n pensei nisso kkkkk */}
       <button
         className="toggle_sidebar_btn"
-        onClick={() => setIsSidebarActive(!isSidebarActive)}
+        onClick={() => setIsSidebarActiveGlobal(!isSidebarActiveGlobal)}
       >
         <img
           src={sidebar_arrow}
           alt="Active"
           style={{
-            isSidebarActive: { transform: "rotate(-180deg)" },
+            isSidebarActiveGlobal: { transform: "rotate(-180deg)" },
           }} /* eu juro q n sei como isso funcionou... mas funcionou :) */
         />
       </button>

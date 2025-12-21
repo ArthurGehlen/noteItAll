@@ -37,6 +37,19 @@
   max-width: 1.8rem;
 }
 
+.sidebar_hidden .sidebar_links a::before {
+  display: none;
+}
+
+.sidebar_hidden .sidebar_links a {
+  padding: 0.6rem;
+}
+
+.sidebar_hidden .active_link {
+  border: 1px solid white;
+  border-radius: 50%;
+}
+
 /* AQUI termina a sidebar_hidden */
 
 .home_logo {
@@ -154,9 +167,9 @@
 
 .toggle_sidebar_btn img {
   min-width: 100%;
-  transition: 0.4s ease transform;
 }
 
+/* haja gambiarra */
 @media screen and (max-width: 618px) {
   .sidebar,
   .sidebar_hidden {
@@ -175,6 +188,10 @@
   .sidebar_hidden {
     width: 5rem;
     z-index: 3;
+  }
+
+  .sidebar_hidden .toggle_sidebar_btn {
+    right: calc(-3.5rem / 2);
   }
 
   .toggle_sidebar_btn {
