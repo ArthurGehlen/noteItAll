@@ -191,11 +191,16 @@
   }
 
   .sidebar_hidden .toggle_sidebar_btn {
-    right: calc(-3.5rem / 2);
+    right: calc(-2.5rem / 2);
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
   }
 
   .toggle_sidebar_btn {
     right: 1rem;
-    z-index: 4;
   }
 }

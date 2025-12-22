@@ -27,8 +27,88 @@
   opacity: 0.5;
 }
 
+.home_favorites {
+  height: 22rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.favorites_carrossel {
+  display: flex;
+}
+
+.home_favorite_card {
+  width: 20rem;
+  height: 20rem;
+  padding: 1.6rem;
+  border-radius: 0.6rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.home_favorite_card h3,
+.statistic_card h3 {
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.home_favorite_card p {
+  line-height: 1.4rem;
+}
+
+.home_favorites h2,
+.statistics_wrapper h2 {
+  font-size: clamp(1.8rem, calc(1.3296vw + 1.0028rem), 2rem);
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.statistics_container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.statistic_card {
+  width: 20rem;
+  height: 10rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: .6rem;
+  color: #FFF;
+}
+
+.statistic_card p {
+  font-size: 4rem;
+}
+
+.statistic_card h3 {
+  font-size: 1.4rem;
+}
+
+.statistic_card q {
+  font-size: .8rem;
+  line-height: 1rem;
+  text-align: justify;
+}
+
 @media screen and (max-width: 618px) {
   .user_greetings_container button {
     flex: 1;
+  }
+
+  .home_favorites {
+    margin-top: 8rem;
+  }
+
+  .statistic_card h3 {
+    font-size: 1.2rem;
   }
 }

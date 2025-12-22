@@ -1,5 +1,5 @@
 // Hooks
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 // Pages
 import LandingPage from "./pages/LandingPage";
@@ -13,8 +13,6 @@ import Favorites from "./pages/Favorites";
 // Routes
 import PrivateRoute from "./routes/PrivateRoute";
 import EmailVerifiedRoute from "./routes/EmailVerifiedRoute"; // proteger as rotas que precisam de login (home, notes, etc...)
-
-// Ao terminar as páginas, dar deploy :) <- remover isso
 
 // TODO: fazer rota para erro (not found) <Route path="*" /> <= NÃO É CERTEZA!
 
