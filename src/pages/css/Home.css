@@ -11,7 +11,7 @@
   font-size: 1.2rem;
 }
 
-.user_greetings_container button {
+.user_greetings_container a {
   padding: 0.8rem 1.2rem;
   background-color: #10b981;
   color: #fff;
@@ -23,7 +23,7 @@
   transition: 0.4s ease opacity;
 }
 
-.user_greetings_container button:hover {
+.user_greetings_container a:hover {
   opacity: 0.5;
 }
 

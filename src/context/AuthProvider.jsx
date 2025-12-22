@@ -59,19 +59,16 @@ export function AuthProvider({ children }) {
           username: user.displayName, // não colocar username default :)
           email: user.email,
           avatar: user.photoURL,
-          theme: "light", // tema padrão
+          theme: "light",
+          notesCount: 0,
+          favoritesCount: 0,
           createdAt: Date.now(),
           updatedAt: Date.now(),
         });
-      }
-
-      if (snap.exists()) {
+      } else {
         await updateDoc(userRef, {
-          username: user.displayName, // não colocar username default :)
-          email: user.email,
           avatar: user.photoURL,
-          theme: "light", // tema padrão
-          createdAt: Date.now(),
+          email: user.email,
           updatedAt: Date.now(),
         });
       }
@@ -97,6 +94,8 @@ export function AuthProvider({ children }) {
         email,
         avatar: null, // só pega o avatar quando entra/cria conta com o google
         theme: "light",
+        notesCount: 0,
+        favoritesCount: 0,
         createdAt: Date.now(),
         updatedAt: Date.now(),
       });
