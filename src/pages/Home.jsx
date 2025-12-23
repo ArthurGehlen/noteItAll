@@ -1,6 +1,7 @@
 // Utils
 import { useAuth } from "../context/AuthProvider";
 import "./css/Home.css";
+import greetings from "../utils/greetings";
 
 // Hooks
 import { Link } from "react-router-dom";
@@ -17,26 +18,7 @@ import Header from "../components/UI/Header";
 function Home() {
   document.title = "NoteItAll - Home";
 
-  const { profile } = useAuth();
-
-  const check_hour = () => {
-    const now = new Date().getHours();
-
-    if (now >= 0 && now <= 12) {
-      return "Bom dia";
-    } else if (now >= 13 && now <= 16) {
-      return "Boa tarde";
-    } else {
-      return "Boa noite";
-    }
-  };
-
-  const greetings = [
-    `${check_hour()}, ${profile.username} 👋 pronto pra anotar umas ideias?`,
-    "De volta? Bora bagunçar mais umas notas 😅",
-    "Bem-vindo de volta! Suas ideias estavam com saudade (ou não).",
-    "Pronto pra escrever algo que vai esquecer de ler depois?",
-  ];
+  const { user, profile } = useAuth();
 
   return (
     <MainComponent>
@@ -44,7 +26,7 @@ function Home() {
       <ContentComponent>
         <Header />
         <div className="user_greetings_container">
-          <p>{greetings[Math.floor(Math.random() * greetings.length)]}</p>
+          <p>{greetings(profile.username)}</p>
           <Link to="/my-notes">
             <img src={add_img} alt="Add" />
             <span>Nova nota</span>

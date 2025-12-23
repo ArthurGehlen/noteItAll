@@ -2,6 +2,8 @@
 import "./css/MyNotes.css";
 import { useAuth } from "../context/AuthProvider";
 import { db } from "../lib/firebase";
+import noteColors from "../utils/noteColors";
+import greetings from "../utils/greetings";
 
 // Images
 import empty_notes from "../assets/empty_notes.svg";
@@ -20,11 +22,13 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
 const MyNotes = () => {
-  const [notes, setNotes] = useState(["a"]);
+  const [notes, setNotes] = useState([]);
+  const [isCreationModeActive, setIsCreationModeActive] = useState(false);
 
-  const { profile, user } = useAuth();
+  const { user, profile } = useAuth();
 
   useEffect(() => {
     const q = query(
@@ -65,6 +69,13 @@ const MyNotes = () => {
       <Sidebar current_link="Minhas Notas" />
       <ContentComponent>
         <Header />
+        <div className="user_greetings_container">
+          <p>{greetings(profile.username)}</p>
+          <button>
+            <img src={add_img} alt="Add" />
+            <span>Nova nota</span>
+          </button>
+        </div>
 
         {notes.length === 0 ? (
           <div className="empty_notes_container">
@@ -79,6 +90,8 @@ const MyNotes = () => {
           <div className="notes_grid">
             {notes.map((note) => (
               <div className="note" key={note.uid}>
+                {" "}
+                {/* haja classe kkkkkk */}
                 <header className="note_header">
                   <h2 className="note_title">{note.title}</h2>
                   <p className="note_content">{note.content}</p>
@@ -94,6 +107,49 @@ const MyNotes = () => {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {isCreationModeActive && (
+          <div className="modal">
+            <div className="overlay" onClick={setIsCreationModeActive(false)} />
+
+            <div className="creation_menu">
+              <h2>Nova Anotação</h2>
+
+              <div className="input_wrapper">
+                <label htmlFor="title">Título</label>
+                <input
+                  type="text"
+                  id="title"
+                  maxLength={50}
+                  placeholder="max: 50 caracteres"
+                  required
+                />
+              </div>
+
+              <div className="input_wrapper">
+                <label htmlFor="content">No que está pensando?</label>
+                <textarea
+                  id="content"
+                  placeholder="max: 245 caracteres"
+                  maxLength={245}
+                  required
+                />
+              </div>
+
+              <div className="input_wrapper checkbox">
+                <input type="checkbox" id="favorite" />
+                <label htmlFor="favorite">Favorito?</label>
+              </div>
+
+              <div className="colors_wrapper">
+                Cores:
+                <div className="colors_container">
+                  {noteColors.noteColorsDark}
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </ContentComponent>

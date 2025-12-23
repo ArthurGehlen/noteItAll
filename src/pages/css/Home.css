@@ -81,8 +81,9 @@
   justify-content: center;
   gap: 1rem;
   padding: 1rem;
-  border-radius: .6rem;
-  color: #FFF;
+  border-radius: 0.6rem;
+  color: #fff;
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.4);
 }
 
 .statistic_card p {
@@ -94,7 +95,7 @@
 }
 
 .statistic_card q {
-  font-size: .8rem;
+  font-size: 0.8rem;
   line-height: 1rem;
   text-align: justify;
 }
