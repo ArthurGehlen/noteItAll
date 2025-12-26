@@ -14,19 +14,26 @@ import MainComponent from "../components/UI/MainComponent";
 import Sidebar from "../components/UI/Sidebar";
 import Header from "../components/UI/Header";
 import ContentComponent from "../components/UI/ContentComponent";
-import { useEffect, useState } from "react";
+
+// Hooks
+import { useEffect, useRef, useState } from "react";
 import {
   collection,
   onSnapshot,
   orderBy,
   query,
   where,
+  addDoc,
 } from "firebase/firestore";
-import { Link } from "react-router-dom";
 
 const MyNotes = () => {
   const [notes, setNotes] = useState([]);
   const [isCreationModeActive, setIsCreationModeActive] = useState(false);
+
+  const noteTitleRef = useRef();
+  const noteContentRef = useRef();
+  const [noteColor, setNoteColor] = useState(null);
+  const [isFavoriteNote, setIsFavoriteNote] = useState(false);
 
   const { user, profile } = useAuth();
 
@@ -37,17 +44,12 @@ const MyNotes = () => {
       orderBy("updatedAt", "desc")
     );
 
-    // fetch em "realtime"
     const unsub = onSnapshot(q, (snap) => {
-      const list = snap.docs.map((d) => ({
-        id: d.id,
-        ...d.data(),
-      }));
-      setNotes(list);
+      setNotes(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
     });
 
-    return () => unsub();
-  }, []);
+    return unsub;
+  }, [user]);
 
   const convert_date = (date) => {
     const new_date = new Date(date);
@@ -64,6 +66,22 @@ const MyNotes = () => {
     return `${day}/${month}/${year} às ${hours}:${minutes}`;
   };
 
+  const create_note = async (e) => {
+    e.preventDefault();
+
+    await addDoc(collection(db, "notes"), {
+      title: noteTitleRef.current.value,
+      content: noteContentRef.current.value,
+      color: noteColor,
+      favorite: isFavoriteNote,
+      uid: user.uid,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+
+    setIsCreationModeActive(false);
+  };
+
   return (
     <MainComponent>
       <Sidebar current_link="Minhas Notas" />
@@ -71,7 +89,7 @@ const MyNotes = () => {
         <Header />
         <div className="user_greetings_container">
           <p>{greetings(profile.username)}</p>
-          <button>
+          <button onClick={() => setIsCreationModeActive(true)}>
             <img src={add_img} alt="Add" />
             <span>Nova nota</span>
           </button>
@@ -81,7 +99,7 @@ const MyNotes = () => {
           <div className="empty_notes_container">
             <img src={empty_notes} alt="Empty Notes" />
             <p>Ops! Parece que está vazio, que tal fazer algumas anotações?</p>
-            <button>
+            <button onClick={() => setIsCreationModeActive(true)}>
               <img src={add_img} alt="Add" />
               <span>Nova nota</span>
             </button>
@@ -89,7 +107,11 @@ const MyNotes = () => {
         ) : (
           <div className="notes_grid">
             {notes.map((note) => (
-              <div className="note" key={note.uid}>
+              <div
+                className="note"
+                key={note.id}
+                style={{ backgroundColor: note.color }}
+              >
                 {" "}
                 {/* haja classe kkkkkk */}
                 <header className="note_header">
@@ -112,9 +134,12 @@ const MyNotes = () => {
 
         {isCreationModeActive && (
           <div className="modal">
-            <div className="overlay" onClick={setIsCreationModeActive(false)} />
+            <div
+              className="overlay"
+              onClick={() => setIsCreationModeActive(false)}
+            />
 
-            <div className="creation_menu">
+            <form className="creation_menu" onSubmit={create_note}>
               <h2>Nova Anotação</h2>
 
               <div className="input_wrapper">
@@ -124,6 +149,7 @@ const MyNotes = () => {
                   id="title"
                   maxLength={50}
                   placeholder="max: 50 caracteres"
+                  ref={noteTitleRef}
                   required
                 />
               </div>
@@ -134,22 +160,38 @@ const MyNotes = () => {
                   id="content"
                   placeholder="max: 245 caracteres"
                   maxLength={245}
+                  ref={noteContentRef}
                   required
                 />
               </div>
 
               <div className="input_wrapper checkbox">
-                <input type="checkbox" id="favorite" />
+                <input
+                  type="checkbox"
+                  id="favorite"
+                  onChange={() => setIsFavoriteNote(!isFavoriteNote)}
+                />
                 <label htmlFor="favorite">Favorito?</label>
               </div>
 
               <div className="colors_wrapper">
                 Cores:
                 <div className="colors_container">
-                  {noteColors.noteColorsDark}
+                  {noteColors.noteColorsLight.map((color) => (
+                    <div
+                      key={color}
+                      className={`color ${
+                        noteColor == color ? "active_color" : ""
+                      }`}
+                      onClick={() => setNoteColor(color)}
+                      style={{ backgroundColor: color }}
+                    ></div>
+                  ))}
                 </div>
               </div>
-            </div>
+
+              <button type="submit">Criar Nota</button>
+            </form>
           </div>
         )}
       </ContentComponent>

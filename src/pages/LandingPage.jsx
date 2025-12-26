@@ -46,7 +46,7 @@ const LandingPage = () => {
           Organize suas ideias, tarefas e pensamenteos com rapidez e
           simplicidade
         </p>
-        <button className="call_button">Comece agora - é grátis!</button>
+        <Link to="/login" className="call_button">Comece agora - é grátis!</Link>
       </div>
       <div className="benefits_wrapper">
         <h2>Funciona, sério</h2>

@@ -25,7 +25,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route
-          path="/home" // todas as rotas do site tem que seguir esse mesmo padrão de rota
+          path="/home" // todas as rotas do site devem seguir esse mesmo padrão 
           element={
             <PrivateRoute>
               <EmailVerifiedRoute>
