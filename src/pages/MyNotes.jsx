@@ -24,6 +24,9 @@ import {
   query,
   where,
   addDoc,
+  increment,
+  updateDoc,
+  doc,
 } from "firebase/firestore";
 
 const MyNotes = () => {
@@ -77,6 +80,10 @@ const MyNotes = () => {
       uid: user.uid,
       createdAt: Date.now(),
       updatedAt: Date.now(),
+    });
+
+    await updateDoc(doc(db, "users", user.uid), {
+      notesCount: increment(1),
     });
 
     setIsCreationModeActive(false);

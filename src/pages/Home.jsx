@@ -18,7 +18,7 @@ import Header from "../components/UI/Header";
 function Home() {
   document.title = "NoteItAll - Home";
 
-  const { user, profile } = useAuth();
+  const { profile } = useAuth();
 
   return (
     <MainComponent>

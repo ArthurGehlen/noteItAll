@@ -74,12 +74,12 @@ const Login = () => {
         <form onSubmit={handle_submit}>
           <div className="auth_input_wrapper">
             <label>Email</label>
-            <input type="email" ref={emailRef} />
+            <input type="email" autoComplete="email" ref={emailRef} />
           </div>
 
           <div className="auth_input_wrapper">
             <label>Senha</label>
-            <input type="password" ref={passwordRef} />
+            <input type="password" autoComplete="current-password" ref={passwordRef} />
           </div>
 
           <button className="submit_form_btn" type="submit">
