@@ -21,4 +21,12 @@ const greetings = (username) => {
   return greetings_list[Math.floor(Math.random() * greetings_list.length)];
 };
 
+// useEffect(() => {
+//   const interval = setInterval(() => {
+//     localStorage.setItem("greetings_message", greetings());
+//   }, 2000);
+
+//   clearInterval(interval);
+// }, []);
+
 export default greetings;

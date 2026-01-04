@@ -34,19 +34,7 @@ function Home() {
         </div>
         <div className="home_favorites">
           <h2>Favoritos</h2>
-          <div className="favorites_carrossel">
-            {" "}
-            {/* fazer um fetch mais tarde, não pretendo colocar aviso de "não há favoritos no momento" */}
-            {/* <div className="home_favorite_card">
-              <h3>Title</h3>
-              <p> * limite de caracteres: 245 *
-                Lorem ipsum dolor sit amet. Ut galisum ullam aut corporis
-                voluptates et odit temporibus et fuga autem est earum nesciunt.
-                Lorem ipsum dolor sit amet. Ut galisum ullam aut corporis
-                voluptates et odit temporibus et fuga autem est earum nesciunt.
-              </p>
-            </div> */}
-          </div>
+          <div className="favorites_carrossel"></div>
         </div>
         <div className="statistics_wrapper">
           <h2>Estatísticas</h2>

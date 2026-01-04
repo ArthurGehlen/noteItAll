@@ -27,6 +27,7 @@ import {
   increment,
   updateDoc,
   doc,
+  deleteDoc,
 } from "firebase/firestore";
 
 const MyNotes = () => {
@@ -87,6 +88,10 @@ const MyNotes = () => {
     });
 
     setIsCreationModeActive(false);
+  };
+
+  const delete_note = async (note) => {
+    await deleteDoc(doc(db, "notes", note.id));
   };
 
   return (
