@@ -70,6 +70,8 @@ const MyNotes = () => {
     return `${day}/${month}/${year} às ${hours}:${minutes}`;
   };
 
+  // fazer verificação... percebi que tem como criar a nota sem cor
+  // criar states pra lidar com erros :)
   const create_note = async (e) => {
     e.preventDefault();
 
@@ -99,13 +101,15 @@ const MyNotes = () => {
       <Sidebar current_link="Minhas Notas" />
       <ContentComponent>
         <Header />
-        <div className="user_greetings_container">
-          <p>{greetings(profile.username)}</p>
-          <button onClick={() => setIsCreationModeActive(true)}>
-            <img src={add_img} alt="Add" />
-            <span>Nova nota</span>
-          </button>
-        </div>
+        {notes.length != 0 && (
+          <div className="user_greetings_container">
+            <p>{greetings(profile.username)}</p>
+            <button onClick={() => setIsCreationModeActive(true)}>
+              <img src={add_img} alt="Add" />
+              <span>Nova nota</span>
+            </button>
+          </div>
+        )}
 
         {notes.length === 0 ? (
           <div className="empty_notes_container">
@@ -170,10 +174,9 @@ const MyNotes = () => {
                 <label htmlFor="content">No que está pensando?</label>
                 <textarea
                   id="content"
-                  placeholder="max: 245 caracteres"
+                  placeholder="max: 245 caracteres (opcional)"
                   maxLength={245}
                   ref={noteContentRef}
-                  required
                 />
               </div>
 

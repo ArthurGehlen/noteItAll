@@ -9,3 +9,33 @@ a {
 button {
   cursor: pointer;
 }
+
+.empty_notes_container button,
+.user_greetings_container button,
+.user_greetings_container a,
+.creation_menu button {
+  padding: 0.8rem 1.2rem;
+  background-color: #10b981;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 2rem;
+  transition: 0.4s ease opacity;
+}
+
+@media screen and (max-width:  618px) {
+  .empty_notes_container button,
+  .user_greetings_container button,
+  .user_greetings_container a,
+  .creation_menu button {
+    flex: 1;
+  }
+}
+
+.empty_notes_container button:hover,
+.user_greetings_container a:hover,
+.creation_menu button:hover {
+  opacity: 0.5;
+}

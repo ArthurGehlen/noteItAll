@@ -1,32 +1,36 @@
 const check_hour = () => {
-  const now = new Date().getHours();
+  const hour = new Date().getHours();
 
-  if (now >= 0 && now <= 12) {
-    return "Bom dia";
-  } else if (now >= 13 && now <= 16) {
-    return "Boa tarde";
-  } else {
-    return "Boa noite";
-  }
+  if (hour < 12) return "Bom dia";
+  if (hour < 18) return "Boa tarde";
+  return "Boa noite";
+};
+
+const get_today_message = () => {
+  return new Date().toISOString().split("T")[0]; // ano/mês/dia
 };
 
 const greetings = (username) => {
-  const greetings_list = [
+  const greetingsList = [
     `${check_hour()}, ${username} 👋 pronto pra anotar umas ideias?`,
     "De volta? Bora bagunçar mais umas notas 😅",
     "Bem-vindo de volta! Suas ideias estavam com saudade (ou não).",
     "Pronto pra escrever algo que vai esquecer de ler depois?",
   ];
 
-  return greetings_list[Math.floor(Math.random() * greetings_list.length)];
+  const today = get_today_message();
+  const stored = JSON.parse(localStorage.getItem("greeting"));
+
+  if (stored && stored.date === today) {
+    return stored.message;
+  }
+
+  const message =
+    greetingsList[Math.floor(Math.random() * greetingsList.length)];
+
+  localStorage.setItem("greeting", JSON.stringify({ date: today, message }));
+
+  return message;
 };
-
-// useEffect(() => {
-//   const interval = setInterval(() => {
-//     localStorage.setItem("greetings_message", greetings());
-//   }, 2000);
-
-//   clearInterval(interval);
-// }, []);
 
 export default greetings;
