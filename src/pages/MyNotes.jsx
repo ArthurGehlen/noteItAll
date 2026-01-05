@@ -14,6 +14,7 @@ import MainComponent from "../components/UI/MainComponent";
 import Sidebar from "../components/UI/Sidebar";
 import Header from "../components/UI/Header";
 import ContentComponent from "../components/UI/ContentComponent";
+import Message from "../components/common/Message";
 
 // Hooks
 import { useEffect, useRef, useState } from "react";
@@ -33,11 +34,18 @@ import {
 const MyNotes = () => {
   const [notes, setNotes] = useState([]);
   const [isCreationModeActive, setIsCreationModeActive] = useState(false);
+  const [messageType, setMessageType] = useState(""); // error ou success
+  const [message, setMessage] = useState("");
 
   const noteTitleRef = useRef();
   const noteContentRef = useRef();
   const [noteColor, setNoteColor] = useState(null);
   const [isFavoriteNote, setIsFavoriteNote] = useState(false);
+  // state pra lidar com erros
+  const [errorStates, setErrorStates] = useState({
+    title: false,
+    color: false,
+  });
 
   const { user, profile } = useAuth();
 
@@ -75,6 +83,30 @@ const MyNotes = () => {
   const create_note = async (e) => {
     e.preventDefault();
 
+    const hasTitleError = !noteTitleRef.current.value;
+    const hasColorError = !noteColor;
+
+    setErrorStates({
+      title: hasTitleError,
+      color: hasColorError,
+    });
+
+    if (hasTitleError && hasColorError) {
+      setMessageType("error");
+      setMessage("A anotação deve ter uma cor e título!");
+      return;
+    }
+    if (hasTitleError) {
+      setMessageType("error");
+      setMessage("A anotação deve ter um título!");
+      return;
+    }
+    if (hasColorError) {
+      setMessageType("error");
+      setMessage("Escolha uma cor para a anotação!");
+      return;
+    }
+
     await addDoc(collection(db, "notes"), {
       title: noteTitleRef.current.value,
       content: noteContentRef.current.value,
@@ -90,11 +122,24 @@ const MyNotes = () => {
     });
 
     setIsCreationModeActive(false);
+    setMessage("");
+    setMessageType("");
   };
 
-  const delete_note = async (note) => {
-    await deleteDoc(doc(db, "notes", note.id));
-  };
+  // caralho... dps de sla quantas tentativas deu certo
+  // tinha até desistido kkkkkkkkk
+  useEffect(() => {
+    const sidebar = document.querySelector(".sidebar_hidden");
+    if (!sidebar) return;
+
+    if (isCreationModeActive) {
+      sidebar.style.zIndex = "1";
+    } else {
+      sidebar.style.zIndex = "3";
+    }
+  }, [isCreationModeActive]);
+
+  // TODO: lógica de deletar a anotação
 
   return (
     <MainComponent>
@@ -152,26 +197,43 @@ const MyNotes = () => {
           <div className="modal">
             <div
               className="overlay"
-              onClick={() => setIsCreationModeActive(false)}
+              onClick={() => {
+                setIsCreationModeActive(false);
+                setErrorStates({ title: false, color: false });
+                setMessage("");
+                setMessageType("");
+              }}
             />
+
+            {message && (
+              <Message message={message} type={messageType} time={4000} />
+            )}
 
             <form className="creation_menu" onSubmit={create_note}>
               <h2>Nova Anotação</h2>
 
               <div className="input_wrapper">
-                <label htmlFor="title">Título</label>
+                <label
+                  htmlFor="title"
+                  className={errorStates["title"] ? "label_error_state" : ""}
+                  style={{ fontWeight: "bold" }}
+                >
+                  Título
+                </label>
                 <input
                   type="text"
                   id="title"
                   maxLength={50}
                   placeholder="max: 50 caracteres"
+                  className={errorStates["title"] ? "input_error_state" : ""}
                   ref={noteTitleRef}
-                  required
                 />
               </div>
 
               <div className="input_wrapper">
-                <label htmlFor="content">No que está pensando?</label>
+                <label htmlFor="content" style={{ fontWeight: "bold" }}>
+                  No que está pensando?
+                </label>
                 <textarea
                   id="content"
                   placeholder="max: 245 caracteres (opcional)"
@@ -190,7 +252,12 @@ const MyNotes = () => {
               </div>
 
               <div className="colors_wrapper">
-                Cores:
+                <span
+                  style={{ fontWeight: "bold" }}
+                  className={errorStates["color"] ? "label_error_state" : ""}
+                >
+                  Cores:
+                </span>
                 <div className="colors_container">
                   {noteColors.noteColorsLight.map((color) => (
                     <div

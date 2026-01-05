@@ -6,8 +6,8 @@ const check_hour = () => {
   return "Boa noite";
 };
 
-const get_today_message = () => {
-  return new Date().toISOString().split("T")[0]; // ano/mês/dia
+const get_today = () => {
+  return new Date().toISOString().split("T")[0];
 };
 
 const greetings = (username) => {
@@ -18,15 +18,19 @@ const greetings = (username) => {
     "Pronto pra escrever algo que vai esquecer de ler depois?",
   ];
 
-  const today = get_today_message();
+  const today = get_today();
   const stored = JSON.parse(localStorage.getItem("greeting"));
 
   if (stored && stored.date === today) {
     return stored.message;
   }
 
-  const message =
-    greetingsList[Math.floor(Math.random() * greetingsList.length)];
+  // filtra pra não repetir a mensagem do dia anterior
+  const filteredList = stored
+    ? greetingsList.filter((msg) => msg !== stored.message)
+    : greetingsList;
+
+  const message = filteredList[Math.floor(Math.random() * filteredList.length)];
 
   localStorage.setItem("greeting", JSON.stringify({ date: today, message }));
 

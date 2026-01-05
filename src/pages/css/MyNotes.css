@@ -28,7 +28,7 @@
 
 .note {
   max-width: 22rem;
-  height: 20rem;
+  height: 30rem; /* mobile fica melhor height: 40rem; desktop fica melhor height: 30rem */
   padding: 2rem;
   border-radius: 0.6rem;
   color: #333;
@@ -47,13 +47,16 @@
 }
 
 .note_title {
+  overflow-wrap: break-word;
   font-size: 1.4rem;
   height: fit-content;
+  max-width: 100% !important;
 }
 
 .note_content {
   line-height: 1.4rem;
   margin-top: 2rem;
+  overflow-wrap: break-word;
 }
 
 .modal {
@@ -148,14 +151,26 @@ textarea {
   opacity: 0.5;
 }
 
+.label_error_state {
+  color: #e73131;
+}
+
+.input_error_state {
+  border: 1px solid #e73131 !important;
+}
+
+.input_error_state::placeholder {
+  color: #e73131;
+}
+
 @media screen and (max-width: 618px) {
   .creation_menu {
-    position: absolute;
-    right: 0 !important;
-    margin: 0;
-    width: 18rem;
-    max-height: 40rem;
-    padding: 1.5rem;
+    height: 30rem;
+    overflow-y: scroll;
+  }
+
+  .note {
+    height: 40rem;
   }
 
   .empty_notes_container button {
