@@ -8,6 +8,7 @@ import greetings from "../utils/greetings";
 // Images
 import empty_notes from "../assets/empty_notes.svg";
 import add_img from "../assets/add_img.svg";
+import delete_icon from "../assets/delete_icon.svg";
 
 // Components
 import MainComponent from "../components/UI/MainComponent";
@@ -53,7 +54,7 @@ const MyNotes = () => {
     const q = query(
       collection(db, "notes"),
       where("uid", "==", user.uid),
-      orderBy("updatedAt", "desc")
+      orderBy("updatedAt", "desc"),
     );
 
     const unsub = onSnapshot(q, (snap) => {
@@ -126,6 +127,22 @@ const MyNotes = () => {
     setMessageType("");
   };
 
+  const delete_note = async (note_id) => {
+    try {
+      await deleteDoc(doc(db, "notes", note_id));
+
+      await updateDoc(doc(db, "users", user.uid), {
+        notesCount: increment(-1),
+      });
+
+      setMessageType("success");
+      setMessage("Nota deletada com sucesso!");
+    } catch (err) {
+      setMessageType("error");
+      setMessage("Erro ao deletar a nota.");
+    }
+  };
+
   // caralho... dps de sla quantas tentativas deu certo
   // tinha até desistido kkkkkkkkk
   useEffect(() => {
@@ -176,6 +193,12 @@ const MyNotes = () => {
                 {" "}
                 {/* haja classe kkkkkk */}
                 <header className="note_header">
+                  <button
+                    className="delete_icon"
+                    onClick={() => delete_note(note.id)}
+                  >
+                    <img src={delete_icon} alt="Delete" />
+                  </button>
                   <h2 className="note_title">{note.title}</h2>
                   <p className="note_content">{note.content}</p>
                   <div className="note_divider"></div>

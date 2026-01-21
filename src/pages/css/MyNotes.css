@@ -163,6 +163,13 @@ textarea {
   color: #e73131;
 }
 
+.delete_icon {
+  background-color: transparent;
+  max-width: 2rem;
+  border: none;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 618px) {
   .creation_menu {
     height: 30rem;
