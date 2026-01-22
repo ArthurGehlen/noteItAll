@@ -3,13 +3,10 @@ import "./css/MyNotes.css";
 import { useAuth } from "../context/AuthProvider";
 import { db } from "../lib/firebase";
 import noteColors from "../utils/noteColors";
-import greetings from "../utils/greetings";
 
 // Images
 import empty_notes from "../assets/empty_notes.svg";
 import add_img from "../assets/add_img.svg";
-import favorite_img from "../assets/favorite_icon.svg";
-import delete_icon from "../assets/delete_icon.svg";
 
 // Components
 import MainComponent from "../components/UI/MainComponent";
@@ -17,6 +14,7 @@ import Sidebar from "../components/UI/Sidebar";
 import Header from "../components/UI/Header";
 import ContentComponent from "../components/UI/ContentComponent";
 import Message from "../components/common/Message";
+import Note from "../components/UI/Note";
 
 // Hooks
 import { useEffect, useRef, useState } from "react";
@@ -30,7 +28,6 @@ import {
   increment,
   updateDoc,
   doc,
-  deleteDoc,
 } from "firebase/firestore";
 
 const MyNotes = () => {
@@ -49,7 +46,7 @@ const MyNotes = () => {
     color: false,
   });
 
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
 
   useEffect(() => {
     const q = query(
@@ -64,21 +61,6 @@ const MyNotes = () => {
 
     return unsub;
   }, [user]);
-
-  const convert_date = (date) => {
-    const new_date = new Date(date);
-
-    // usei o padStart só pra garantir que vai ser 2 digitos
-    // ex: dia 5, sem o padStart iria retornar 5/12
-    const day = String(new_date.getDate()).padStart(2, "0");
-    const month = String(new_date.getMonth() + 1).padStart(2, "0");
-    const year = new_date.getFullYear();
-
-    const hours = String(new_date.getHours()).padStart(2, "0");
-    const minutes = String(new_date.getMinutes()).padStart(2, "0");
-
-    return `${day}/${month}/${year} às ${hours}:${minutes}`;
-  };
 
   // fazer verificação... percebi que tem como criar a nota sem cor
   // criar states pra lidar com erros :)
@@ -128,34 +110,6 @@ const MyNotes = () => {
     setMessageType("");
   };
 
-  const delete_note = async (note_id) => {
-    try {
-      await deleteDoc(doc(db, "notes", note_id));
-
-      await updateDoc(doc(db, "users", user.uid), {
-        notesCount: increment(-1),
-      });
-
-      setMessageType("success");
-      setMessage("Nota deletada com sucesso!");
-    } catch (err) {
-      setMessageType("error");
-      setMessage("Erro ao deletar a nota.");
-    }
-  };
-
-  const favorite_note = async (note_id) => {
-    try {
-      await addDoc(doc(db, "favorites", note_id));
-      await updateDoc(doc(db, "users", note_id), {
-        notesCount: increment(1),
-      });
-    } catch (e) {
-      setMessageType("error");
-      setMessage("Erro ao favoritar a nota.");
-    }
-  };
-
   // caralho... dps de sla quantas tentativas deu certo
   // tinha até desistido kkkkkkkkk
   useEffect(() => {
@@ -169,22 +123,24 @@ const MyNotes = () => {
     }
   }, [isCreationModeActive]);
 
-  // TODO: lógica de deletar a anotação
+  const handle_note_error = (msg) => {
+    setMessageType("error");
+    setMessage(msg);
+  };
+
+  const handle_note_success = (msg) => {
+    setMessageType("success");
+    setMessage(msg);
+  };
 
   return (
     <MainComponent>
       <Sidebar current_link="Minhas Notas" />
       <ContentComponent>
-        <Header />
-        {notes.length != 0 && (
-          <div className="user_greetings_container">
-            <p>{greetings(profile.username)}</p>
-            <button onClick={() => setIsCreationModeActive(true)}>
-              <img src={add_img} alt="Add" />
-              <span>Nova nota</span>
-            </button>
-          </div>
-        )}
+        <Header
+          page="my-notes"
+          handle_click={() => setIsCreationModeActive(true)}
+        />
 
         {notes.length === 0 ? (
           <div className="empty_notes_container">
@@ -198,41 +154,12 @@ const MyNotes = () => {
         ) : (
           <div className="notes_grid">
             {notes.map((note) => (
-              <div
-                className="note"
+              <Note
+                note_obj={note}
                 key={note.id}
-                style={{ backgroundColor: note.color }}
-              >
-                {" "}
-                {/* haja classe kkkkkk */}
-                <header className="note_header">
-                  <div className="note_actions">
-                    <button
-                      className="delete_icon"
-                      onClick={() => delete_note(note.id)}
-                    >
-                      <img src={delete_icon} alt="Delete" />
-                    </button>
-                    <button
-                      className="favorite_icon"
-                      onClick={() => favorite_note(note.id)}
-                    >
-                      <img src={favorite_img} alt="Favorite" />
-                    </button>
-                  </div>
-                  <h2 className="note_title">{note.title}</h2>
-                  <p className="note_content">{note.content}</p>
-                  <div className="note_divider"></div>
-                </header>
-                <div className="note_date_container">
-                  <p className="note_timestamp">
-                    Criado em: {convert_date(note.createdAt)}
-                  </p>
-                  <p className="note_timestamp">
-                    Atualizado em: {convert_date(note.updatedAt)}
-                  </p>
-                </div>
-              </div>
+                onError={handle_note_error}
+                onSuccess={handle_note_success}
+              />
             ))}
           </div>
         )}

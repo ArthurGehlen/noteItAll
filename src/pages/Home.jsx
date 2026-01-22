@@ -1,13 +1,6 @@
 // Utils
 import { useAuth } from "../context/AuthProvider";
 import "./css/Home.css";
-import greetings from "../utils/greetings";
-
-// Hooks
-import { Link } from "react-router-dom";
-
-// Images
-import add_img from "../assets/add_img.svg";
 
 // Components
 import MainComponent from "../components/UI/MainComponent";
@@ -25,13 +18,7 @@ function Home() {
       <Sidebar current_link="Home" />
       <ContentComponent>
         <Header />
-        <div className="user_greetings_container">
-          <p>{greetings(profile.username)}</p>
-          <Link to="/my-notes">
-            <img src={add_img} alt="Add" />
-            <span>Nova nota</span>
-          </Link>
-        </div>
+
         <div className="home_favorites">
           <h2>Favoritos</h2>
           <div className="favorites_carrossel"></div>
