@@ -8,6 +8,7 @@ import greetings from "../utils/greetings";
 // Images
 import empty_notes from "../assets/empty_notes.svg";
 import add_img from "../assets/add_img.svg";
+import favorite_img from "../assets/favorite_icon.svg";
 import delete_icon from "../assets/delete_icon.svg";
 
 // Components
@@ -143,6 +144,18 @@ const MyNotes = () => {
     }
   };
 
+  const favorite_note = async (note_id) => {
+    try {
+      await addDoc(doc(db, "favorites", note_id));
+      await updateDoc(doc(db, "users", note_id), {
+        notesCount: increment(1),
+      });
+    } catch (e) {
+      setMessageType("error");
+      setMessage("Erro ao favoritar a nota.");
+    }
+  };
+
   // caralho... dps de sla quantas tentativas deu certo
   // tinha até desistido kkkkkkkkk
   useEffect(() => {
@@ -193,12 +206,20 @@ const MyNotes = () => {
                 {" "}
                 {/* haja classe kkkkkk */}
                 <header className="note_header">
-                  <button
-                    className="delete_icon"
-                    onClick={() => delete_note(note.id)}
-                  >
-                    <img src={delete_icon} alt="Delete" />
-                  </button>
+                  <div className="note_actions">
+                    <button
+                      className="delete_icon"
+                      onClick={() => delete_note(note.id)}
+                    >
+                      <img src={delete_icon} alt="Delete" />
+                    </button>
+                    <button
+                      className="favorite_icon"
+                      onClick={() => favorite_note(note.id)}
+                    >
+                      <img src={favorite_img} alt="Favorite" />
+                    </button>
+                  </div>
                   <h2 className="note_title">{note.title}</h2>
                   <p className="note_content">{note.content}</p>
                   <div className="note_divider"></div>
