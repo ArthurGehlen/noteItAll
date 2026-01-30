@@ -1,18 +1,19 @@
 # NoteItAll
 
 Aplicação web de anotações com autenticação via Firebase.
-Usuários podem criar conta, fazer login (email/senha ou Google) e gerenciar suas anotações pessoais.
 
 ## Tecnologias
-React + Vite
+## Tecnologias
 
-Firebase Authentication
+![Vite](https://img.shields.io/badge/-Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
-Firestore Database
+![React](https://img.shields.io/badge/-React-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 
-React Router
+![React Router](https://img.shields.io/badge/-React%20Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 
-Context API
+![Firebase](https://img.shields.io/badge/-Firebase-FFA611?style=for-the-badge&logo=firebase&logoColor=white)
+
+![Firestore](https://img.shields.io/badge/-Firestore-FC6C00?style=for-the-badge&logo=googlecloud&logoColor=white)
 
 ## Funcionalidades atuais
 - Signup com email e senha
