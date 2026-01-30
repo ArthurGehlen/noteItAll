@@ -139,8 +139,13 @@ const MyNotes = () => {
       <ContentComponent>
         <Header
           page="my-notes"
-          handle_click={() => setIsCreationModeActive(true)}
+          handle_click={() =>
+            setIsCreationModeActive(true)
+          } /* separando o link pra criar notas e o botão de criar notas */
         />
+        {message && (
+          <Message message={message} type={messageType} time={4000} />
+        )}
 
         {notes.length === 0 ? (
           <div className="empty_notes_container">

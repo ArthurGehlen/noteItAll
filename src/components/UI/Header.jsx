@@ -32,20 +32,22 @@ const Header = ({ page, handle_click }) => {
           <h2>{profile.username}</h2>
         </div>
       </div>
-      <div className="user_greetings_container">
-        <p>{greetings(profile.username)}</p>
-        {page === "my-notes" ? (
-          <button onClick={handle_click}>
-            <img src={add_img} alt="Add" />
-            <span>Nova nota</span>
-          </button>
-        ) : (
-          <Link to="/my-notes">
-            <img src={add_img} alt="Add" />
-            <span>Nova nota</span>
-          </Link>
-        )}
-      </div>
+      {profile.notesCount !== 0 && (
+        <div className="user_greetings_container">
+          <p>{greetings(profile.username)}</p>
+          {page === "my-notes" ? (
+            <button onClick={handle_click}>
+              <img src={add_img} alt="Add" />
+              <span>Nova nota</span>
+            </button>
+          ) : (
+            <Link to="/my-notes">
+              <img src={add_img} alt="Add" />
+              <span>Nova nota</span>
+            </Link>
+          )}
+        </div>
+      )}
     </div>
   );
 };

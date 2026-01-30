@@ -11,6 +11,7 @@ button {
 }
 
 .empty_notes_container button,
+.empty_notes_container a,
 .user_greetings_container button,
 .user_greetings_container a,
 .creation_menu button {

@@ -48,7 +48,7 @@
 }
 
 .user_options a:hover,
-.a:hover {
+.call_button:hover {
   opacity: 0.8;
 }
 

@@ -1,7 +1,8 @@
 .note {
-  max-width: 22rem;
-  height: 30rem; /* mobile fica melhor height: 40rem; desktop fica melhor height: 30rem */
-  padding: 2rem;
+  width: 25rem;
+  max-width: 100%;
+  height: 35rem; /* mobile fica melhor height: 40rem; desktop fica melhor height: 35rem */
+  padding: 1rem 2rem;
   border-radius: 0.6rem;
   color: #333;
   display: flex;
@@ -15,19 +16,19 @@
   width: 100%;
   background-color: #999;
   opacity: 0.4;
-  margin-top: 1rem;
 }
 
-.note_title {
+.note_title h2 {
+  padding-top: 1rem;
   overflow-wrap: break-word;
   font-size: 1.4rem;
-  height: fit-content;
+  height: 4rem;
   max-width: 100% !important;
 }
 
 .note_content {
   line-height: 1.4rem;
-  margin-top: 2rem;
+  margin: 1rem auto;
   overflow-wrap: break-word;
 }
 

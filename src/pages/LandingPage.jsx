@@ -46,7 +46,9 @@ const LandingPage = () => {
           Organize suas ideias, tarefas e pensamenteos com rapidez e
           simplicidade
         </p>
-        <Link to="/login" className="call_button">Comece agora - é grátis!</Link>
+        <Link to="/login" className="call_button">
+          Comece agora - é grátis!
+        </Link>
       </div>
       <div className="benefits_wrapper">
         <h2>Funciona, sério</h2>
@@ -112,7 +114,9 @@ const LandingPage = () => {
         <div className="call_to_action">
           <h2>Pronto para anotar tudo que passa pela sua cabeça?</h2>
 
-          <Link to="/signup" className="call_button">Criar conta Grátis</Link>
+          <Link to="/signup" className="call_button">
+            Criar conta Grátis
+          </Link>
         </div>
       </div>
 
