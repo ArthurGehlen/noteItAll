@@ -2,7 +2,8 @@
 
 Aplicação web de anotações com autenticação via Firebase.
 
-## Tecnologias
+![Preview da aplicação](./design/landing_page_desing.png)
+
 ## Tecnologias
 
 ![Vite](https://img.shields.io/badge/-Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
