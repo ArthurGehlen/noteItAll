@@ -2,7 +2,7 @@
 
 Aplicação web de anotações com autenticação via Firebase.
 
-![Preview da aplicação](./design/landing_page_desing.png)
+![Preview da aplicação](./design/landing_page_design.png)
 
 ## Tecnologias
 
