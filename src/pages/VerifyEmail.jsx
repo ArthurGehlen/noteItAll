@@ -8,13 +8,14 @@ import "./css/AccountPage.css";
 import { useAuth } from "../context/AuthProvider";
 
 // Components
-import Message from "../components/common/Message";
+import Alert from "@mui/joy/Alert";
 
 function VerifyEmail() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [resending, setResending] = useState(false);
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
 
   useEffect(() => {
     if (!user) navigate("/login");
@@ -39,8 +40,10 @@ function VerifyEmail() {
     try {
       await sendEmailVerification(user);
       setMessage("Email reenviado.");
+      setMessageType("success");
     } catch (e) {
       setMessage("Erro ao reenviar.");
+      setMessageType("danger");
     }
 
     setResending(false);
@@ -50,7 +53,11 @@ function VerifyEmail() {
 
   return (
     <div className="auth_page">
-      {message && <Message type={success ? success : error} />}
+      {message && (
+        <Alert color={messageType} variant="solid">
+          {message}
+        </Alert>
+      )}
       <div className="auth_container">
         <h2>Verifique seu email</h2>
         <p>

@@ -12,7 +12,7 @@ import "../styles/globals.css";
 import { useAuth } from "../context/AuthProvider";
 
 // Components
-import Message from "../components/common/Message";
+import Alert from "@mui/joy/Alert";
 
 const Login = () => {
   document.title = "NoteItAll - Login";
@@ -40,7 +40,7 @@ const Login = () => {
     const result = await login_action(email, password);
 
     if (!result.ok) {
-      setMessageType("error");
+      setMessageType("danger");
       setMessage(result.error);
       return;
     }
@@ -54,14 +54,18 @@ const Login = () => {
       await auth_with_google();
       navigate("/home");
     } catch (erro) {
-      setMessageType("error");
+      setMessageType("danger");
       setMessage(erro);
     }
   };
 
   return (
     <div className="auth_page">
-      {message && <Message type={messageType} message={message} />}
+      {message && (
+        <Alert color={messageType} variant="solid">
+          {message}
+        </Alert>
+      )}
 
       <div className="landing_logo">
         <img src={logo} alt="Logo" />
@@ -79,7 +83,11 @@ const Login = () => {
 
           <div className="auth_input_wrapper">
             <label>Senha</label>
-            <input type="password" autoComplete="current-password" ref={passwordRef} />
+            <input
+              type="password"
+              autoComplete="current-password"
+              ref={passwordRef}
+            />
           </div>
 
           <button className="submit_form_btn" type="submit">

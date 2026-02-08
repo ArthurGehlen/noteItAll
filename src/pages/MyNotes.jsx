@@ -13,7 +13,15 @@ import MainComponent from "../components/UI/MainComponent";
 import Sidebar from "../components/UI/Sidebar";
 import Header from "../components/UI/Header";
 import ContentComponent from "../components/UI/ContentComponent";
-import Message from "../components/common/Message";
+import Button from "@mui/joy/Button";
+import Divider from "@mui/joy/Divider";
+import DialogTitle from "@mui/joy/DialogTitle";
+import DialogContent from "@mui/joy/DialogContent";
+import DialogActions from "@mui/joy/DialogActions";
+import Modal from "@mui/joy/Modal";
+import ModalDialog from "@mui/joy/ModalDialog";
+import Alert from "@mui/joy/Alert";
+import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 import Note from "../components/UI/Note";
 
 // Hooks
@@ -28,13 +36,17 @@ import {
   increment,
   updateDoc,
   doc,
+  deleteDoc,
 } from "firebase/firestore";
 
 const MyNotes = () => {
   const [notes, setNotes] = useState([]);
   const [isCreationModeActive, setIsCreationModeActive] = useState(false);
-  const [messageType, setMessageType] = useState(""); // error ou success
+  const [noteToDelete, setNoteToDelete] = useState(null);
+  const [deleteNoteMode, setDeleteNoteMode] = useState(false);
+  const [messageType, setMessageType] = useState(""); // danger ou success
   const [message, setMessage] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
 
   const noteTitleRef = useRef();
   const noteContentRef = useRef();
@@ -76,18 +88,18 @@ const MyNotes = () => {
     });
 
     if (hasTitleError && hasColorError) {
-      setMessageType("error");
-      setMessage("A anotação deve ter uma cor e título!");
+      setMessageType("danger");
+      setModalMessage("A anotação deve ter uma cor e título!");
       return;
     }
     if (hasTitleError) {
-      setMessageType("error");
-      setMessage("A anotação deve ter um título!");
+      setMessageType("danger");
+      setModalMessage("A anotação deve ter um título!");
       return;
     }
     if (hasColorError) {
-      setMessageType("error");
-      setMessage("Escolha uma cor para a anotação!");
+      setMessageType("danger");
+      setModalMessage("Escolha uma cor para a anotação!");
       return;
     }
 
@@ -106,7 +118,7 @@ const MyNotes = () => {
     });
 
     setIsCreationModeActive(false);
-    setMessage("");
+    setModalMessage("");
     setMessageType("");
   };
 
@@ -123,14 +135,50 @@ const MyNotes = () => {
     }
   }, [isCreationModeActive]);
 
-  const handle_note_error = (msg) => {
-    setMessageType("error");
-    setMessage(msg);
+  const delete_note = async (note) => {
+    try {
+      await deleteDoc(doc(db, "notes", note.id));
+
+      await updateDoc(doc(db, "users", user.uid), {
+        notesCount: increment(-1),
+      });
+
+      if (note.favorite) {
+        await updateDoc(doc(db, "users", user.uid), {
+          favoritesCount: increment(-1),
+        });
+      }
+
+      setMessageType("success");
+      setMessage("Nota deletada com sucesso!");
+    } catch (err) {
+      setMessageType("danger");
+      setMessage("Erro ao deletar a nota");
+    }
   };
 
-  const handle_note_success = (msg) => {
-    setMessageType("success");
-    setMessage(msg);
+  const favorite_note = async (note) => {
+    try {
+      const is_favoriting = !note.favorite;
+
+      if (is_favoriting) {
+        await updateDoc(doc(db, "users", user.uid), {
+          favoritesCount: increment(1),
+        });
+      } else {
+        await updateDoc(doc(db, "users", user.uid), {
+          favoritesCount: increment(-1),
+        });
+      }
+
+      await updateDoc(doc(db, "notes", note.id), {
+        favorite: is_favoriting,
+        updatedAt: Date.now(),
+      });
+    } catch {
+      setMessageType("danger");
+      setMessage("Erro ao favoritar a nota.");
+    }
   };
 
   return (
@@ -144,7 +192,9 @@ const MyNotes = () => {
           } /* separando o link pra criar notas e o botão de criar notas */
         />
         {message && (
-          <Message message={message} type={messageType} time={4000} />
+          <Alert color={messageType} variant="solid">
+            {message}
+          </Alert>
         )}
 
         {notes.length === 0 ? (
@@ -162,11 +212,56 @@ const MyNotes = () => {
               <Note
                 note_obj={note}
                 key={note.id}
-                onError={handle_note_error}
-                onSuccess={handle_note_success}
+                handle_delete={() => {
+                  setNoteToDelete(note);
+                  setDeleteNoteMode(true);
+                }}
+                handle_favorite={() => favorite_note(note)}
               />
             ))}
           </div>
+        )}
+
+        {deleteNoteMode && (
+          <Modal open={deleteNoteMode} onClose={() => setDeleteNoteMode(false)}>
+            <ModalDialog variant="outlined" role="alertdialog">
+              <DialogTitle>
+                <WarningRoundedIcon />
+                Atenção
+              </DialogTitle>
+
+              <Divider />
+
+              <DialogContent>
+                Você tem certeza que quer deletar essa anotação?
+              </DialogContent>
+
+              <DialogActions>
+                <Button
+                  variant="solid"
+                  color="danger"
+                  onClick={async () => {
+                    await delete_note(noteToDelete);
+                    setDeleteNoteMode(false);
+                    setNoteToDelete(null);
+                  }}
+                >
+                  Sim
+                </Button>
+
+                <Button
+                  variant="plain"
+                  color="neutral"
+                  onClick={() => {
+                    setDeleteNoteMode(false);
+                    setNoteToDelete(null);
+                  }}
+                >
+                  Cancelar
+                </Button>
+              </DialogActions>
+            </ModalDialog>
+          </Modal>
         )}
 
         {isCreationModeActive && (
@@ -176,13 +271,15 @@ const MyNotes = () => {
               onClick={() => {
                 setIsCreationModeActive(false);
                 setErrorStates({ title: false, color: false });
-                setMessage("");
+                setModalMessage("");
                 setMessageType("");
               }}
             />
 
-            {message && (
-              <Message message={message} type={messageType} time={4000} />
+            {modalMessage && (
+              <Alert color={messageType} variant="solid">
+                {modalMessage}
+              </Alert>
             )}
 
             <form className="creation_menu" onSubmit={create_note}>

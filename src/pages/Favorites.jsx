@@ -13,6 +13,10 @@ import {
   orderBy,
   query,
   where,
+  increment,
+  updateDoc,
+  doc,
+  deleteDoc,
 } from "firebase/firestore";
 
 // Images
@@ -22,15 +26,25 @@ import add_img from "../assets/add_img.svg";
 // Components
 import MainComponent from "../components/UI/MainComponent";
 import Sidebar from "../components/UI/Sidebar";
-import ContentComponent from "../components/UI/ContentComponent";
 import Header from "../components/UI/Header";
-import Message from "../components/common/Message";
+import ContentComponent from "../components/UI/ContentComponent";
+import Button from "@mui/joy/Button";
+import Divider from "@mui/joy/Divider";
+import DialogTitle from "@mui/joy/DialogTitle";
+import DialogContent from "@mui/joy/DialogContent";
+import DialogActions from "@mui/joy/DialogActions";
+import Modal from "@mui/joy/Modal";
+import ModalDialog from "@mui/joy/ModalDialog";
+import Alert from "@mui/joy/Alert";
+import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 import Note from "../components/UI/Note";
 
 const Favorites = () => {
   const [notes, setNotes] = useState([]);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+  const [noteToDelete, setNoteToDelete] = useState(null);
+  const [deleteNoteMode, setDeleteNoteMode] = useState("");
   const { user } = useAuth();
 
   useEffect(() => {
@@ -48,14 +62,50 @@ const Favorites = () => {
     return unsub;
   }, [user]);
 
-  const handle_note_error = (msg) => {
-    setMessageType("error");
-    setMessage(msg);
+  const delete_note = async (note) => {
+    try {
+      await deleteDoc(doc(db, "notes", note.id));
+
+      await updateDoc(doc(db, "users", user.uid), {
+        notesCount: increment(-1),
+      });
+
+      if (note.favorite) {
+        await updateDoc(doc(db, "users", user.uid), {
+          favoritesCount: increment(-1),
+        });
+      }
+
+      setMessageType("success");
+      setMessage("Nota deletada com sucesso!");
+    } catch (err) {
+      setMessageType("danger");
+      setMessage("Erro ao deletar a nota");
+    }
   };
 
-  const handle_note_success = (msg) => {
-    setMessageType("success");
-    setMessage(msg);
+  const favorite_note = async (note) => {
+    try {
+      const is_favoriting = !note.favorite;
+
+      if (is_favoriting) {
+        await updateDoc(doc(db, "users", user.uid), {
+          favoritesCount: increment(1),
+        });
+      } else {
+        await updateDoc(doc(db, "users", user.uid), {
+          favoritesCount: increment(-1),
+        });
+      }
+
+      await updateDoc(doc(db, "notes", note.id), {
+        favorite: is_favoriting,
+        updatedAt: Date.now(),
+      });
+    } catch {
+      setMessageType("danger");
+      setMessage("Erro ao favoritar a nota.");
+    }
   };
 
   return (
@@ -64,7 +114,9 @@ const Favorites = () => {
       <ContentComponent>
         <Header />
         {message && (
-          <Message message={message} type={messageType} time={4000} />
+          <Alert color={messageType} variant="solid">
+            {message}
+          </Alert>
         )}
         {notes.length === 0 ? (
           <div className="empty_notes_container">
@@ -81,11 +133,56 @@ const Favorites = () => {
               <Note
                 note_obj={note}
                 key={note.id}
-                onError={handle_note_error}
-                onSuccess={handle_note_success}
+                handle_delete={() => {
+                  setNoteToDelete(note);
+                  setDeleteNoteMode(true);
+                }}
+                handle_favorite={() => favorite_note(note)}
               />
             ))}
           </div>
+        )}
+
+        {deleteNoteMode && (
+          <Modal open={deleteNoteMode} onClose={() => setDeleteNoteMode(false)}>
+            <ModalDialog variant="outlined" role="alertdialog">
+              <DialogTitle>
+                <WarningRoundedIcon />
+                Atenção
+              </DialogTitle>
+
+              <Divider />
+
+              <DialogContent>
+                Você tem certeza que quer deletar essa anotação?
+              </DialogContent>
+
+              <DialogActions>
+                <Button
+                  variant="solid"
+                  color="danger"
+                  onClick={async () => {
+                    await delete_note(noteToDelete);
+                    setDeleteNoteMode(false);
+                    setNoteToDelete(null);
+                  }}
+                >
+                  Sim
+                </Button>
+
+                <Button
+                  variant="plain"
+                  color="neutral"
+                  onClick={() => {
+                    setDeleteNoteMode(false);
+                    setNoteToDelete(null);
+                  }}
+                >
+                  Cancelar
+                </Button>
+              </DialogActions>
+            </ModalDialog>
+          </Modal>
         )}
       </ContentComponent>
     </MainComponent>

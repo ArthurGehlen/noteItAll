@@ -6,52 +6,8 @@ import active_favorite_icon from "../../assets/active_favorite_icon.svg";
 // Utils
 import "./Note.css";
 import { convert_date } from "../../utils/convertDate";
-import { db } from "../../lib/firebase";
-import { useAuth } from "../../context/AuthProvider";
 
-// Hooks
-import { increment, updateDoc, doc, deleteDoc } from "firebase/firestore";
-
-const Note = ({ note_obj, onError, onSucces }) => {
-  const { user } = useAuth();
-
-  const delete_note = async (note_id) => {
-    try {
-      await deleteDoc(doc(db, "notes", note_id));
-
-      await updateDoc(doc(db, "users", user.uid), {
-        notesCount: increment(-1),
-      });
-
-      onSucces("Nota deletada com sucesso!");
-    } catch (err) {
-      onError("Erro ao deletar a nota.");
-    }
-  };
-
-  const favorite_note = async (note) => {
-    try {
-      const is_favoriting = !note.favorite;
-
-      if (is_favoriting) {
-        await updateDoc(doc(db, "users", user.uid), {
-          favoritesCount: increment(1),
-        });
-      } else {
-        await updateDoc(doc(db, "users", user.uid), {
-          favoritesCount: increment(-1),
-        });
-      }
-
-      await updateDoc(doc(db, "notes", note.id), {
-        favorite: is_favoriting,
-        updatedAt: Date.now(),
-      });
-    } catch {
-      onError("Erro ao favoritar a nota.");
-    }
-  };
-
+const Note = ({ note_obj, handle_delete, handle_favorite }) => {
   return (
     <div
       className="note"
@@ -62,16 +18,10 @@ const Note = ({ note_obj, onError, onSucces }) => {
       {/* haja classe kkkkkk */}
       <header className="note_header">
         <div className="note_actions">
-          <button
-            className="delete_icon"
-            onClick={() => delete_note(note_obj.id)}
-          >
+          <button className="delete_icon" onClick={handle_delete}>
             <img src={delete_icon} style={{ fill: "white" }} alt="Delete" />
           </button>
-          <button
-            className="favorite_icon"
-            onClick={() => favorite_note(note_obj)}
-          >
+          <button className="favorite_icon" onClick={handle_favorite}>
             <img
               src={note_obj.favorite ? active_favorite_icon : favorite_img}
               alt="Favorite"

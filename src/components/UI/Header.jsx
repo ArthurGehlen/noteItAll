@@ -2,12 +2,12 @@
 import "./Header.css";
 import { useAuth } from "../../context/AuthProvider";
 import greetings from "../../utils/greetings";
+import Avatar from "@mui/joy/Avatar";
 
 // Hooks
 import { Link } from "react-router-dom";
 
 // Images
-import user_without_avatar from "../../assets/user_without_avatar.svg";
 import add_img from "../../assets/add_img.svg";
 
 const Header = ({ page, handle_click }) => {
@@ -21,13 +21,9 @@ const Header = ({ page, handle_click }) => {
       <div className="header">
         <div className="user_area_header">
           {profile.avatar ? (
-            <img src={profile.avatar} alt="Avatar" />
+            <Avatar src={profile.avatar} size="lg" />
           ) : (
-            <img
-              src={user_without_avatar}
-              alt="Avatar"
-              style={{ maxWidth: "3.25rem" }}
-            />
+            <Avatar />
           )}
           <h2>{profile.username}</h2>
         </div>

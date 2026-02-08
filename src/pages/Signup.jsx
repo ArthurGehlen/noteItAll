@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // Components
-import Message from "../components/common/Message";
+import Alert from "@mui/joy/Alert";
 
 // Utils
 import { useAuth } from "../context/AuthProvider";
@@ -35,11 +35,11 @@ const Signup = () => {
       emailRef.current.value,
       usernameRef.current.value,
       passwordRef.current.value,
-      confirmPasswordRef.current.value
+      confirmPasswordRef.current.value,
     );
 
     if (!result.ok) {
-      setMessageType("error");
+      setMessageType("danger");
       setMessage(result.error);
       return;
     }
@@ -49,7 +49,11 @@ const Signup = () => {
 
   return (
     <div className="auth_page">
-      {message && <Message type={messageType} message={message} />}
+      {message && (
+        <Alert color={messageType} variant="solid">
+          {message}
+        </Alert>
+      )}
 
       <div className="landing_logo">
         <img src={logo} alt="Logo" />
