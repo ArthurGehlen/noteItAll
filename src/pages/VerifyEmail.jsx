@@ -1,6 +1,8 @@
 // Hooks
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+// Firebase Auth
 import { sendEmailVerification } from "firebase/auth";
 
 // Utils

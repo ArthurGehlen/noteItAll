@@ -1,6 +1,6 @@
 // Hooks
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 // Images
 import logo from "../assets/logo.svg";
@@ -52,7 +52,6 @@ const Login = () => {
     // try/catch é considerado gambiarra??
     try {
       await auth_with_google();
-      navigate("/home");
     } catch (erro) {
       setMessageType("danger");
       setMessage(erro);
@@ -105,7 +104,11 @@ const Login = () => {
           Não possui uma conta? <Link to="/signup">Crie uma</Link>
         </p>
 
-        <button className="auth_social_btn" onClick={handle_google_login}>
+        <button
+          className="auth_social_btn"
+          onClick={handle_google_login}
+          type="submit"
+        >
           <img src={google_icon} alt="Icon" />
           <span>Entre com o Google</span>
         </button>

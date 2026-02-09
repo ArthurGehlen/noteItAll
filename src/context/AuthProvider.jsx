@@ -1,12 +1,18 @@
 // Hooks
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
+// Firebase Auth
 import {
+  onAuthStateChanged,
+  signOut,
   createUserWithEmailAndPassword,
   sendEmailVerification,
   signInWithPopup,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
-import { signInWithEmailAndPassword } from "firebase/auth";
+
+// Firestore
 import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 
 // Utils
@@ -19,6 +25,16 @@ export function AuthProvider({ children }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const navigate = useNavigate();
+
+  // redirect quando auth + profile estiverem prontos
+  useEffect(() => {
+    if (user && profile) {
+      navigate("/home");
+    }
+  }, [user, profile]);
+
+  // listener principal de auth
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (!firebaseUser) {
@@ -28,14 +44,21 @@ export function AuthProvider({ children }) {
         return;
       }
 
-      if (!firebaseUser.emailVerified) {
+      const is_google_user = firebaseUser.providerData.some(
+        (p) => p.providerId === "google.com",
+      );
+
+      // bloqueia SOMENTE email/senha não verificado
+      if (!firebaseUser.emailVerified && !is_google_user) {
         setUser(firebaseUser);
         setProfile(null);
         setLoading(false);
         return;
       }
 
-      const snap = await getDoc(doc(db, "users", firebaseUser.uid));
+      const ref = doc(db, "users", firebaseUser.uid);
+      const snap = await getDoc(ref);
+
       setUser(firebaseUser);
       setProfile(snap.exists() ? snap.data() : null);
       setLoading(false);
@@ -47,33 +70,33 @@ export function AuthProvider({ children }) {
   const logout = () => signOut(auth);
 
   const auth_with_google = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
+    const result = await signInWithPopup(auth, googleProvider);
+    const firebaseUser = result.user;
 
-      const userRef = doc(db, "users", user.uid);
-      const snap = await getDoc(userRef);
+    const userRef = doc(db, "users", firebaseUser.uid);
+    const snap = await getDoc(userRef);
 
-      if (!snap.exists()) {
-        await setDoc(userRef, {
-          username: user.displayName, // não colocar username default :)
-          email: user.email,
-          avatar: user.photoURL,
-          theme: "light",
-          notesCount: 0,
-          favoritesCount: 0,
-          createdAt: Date.now(),
-          updatedAt: Date.now(),
-        });
-      } else {
-        await updateDoc(userRef, {
-          avatar: user.photoURL,
-          email: user.email,
-          updatedAt: Date.now(),
-        });
-      }
-    } catch (e) {
-      console.error(e);
+    if (!snap.exists()) {
+      const data = {
+        email: firebaseUser.email,
+        username: firebaseUser.displayName,
+        avatar: firebaseUser.photoURL,
+        notesCount: 0,
+        favoritesCount: 0,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+
+      await setDoc(userRef, data);
+      setProfile(data);
+    } else {
+      await updateDoc(userRef, {
+        avatar: firebaseUser.photoURL,
+        email: firebaseUser.email,
+        updatedAt: Date.now(),
+      });
+
+      setProfile({ ...snap.data(), avatar: firebaseUser.photoURL });
     }
   };
 
@@ -92,8 +115,7 @@ export function AuthProvider({ children }) {
       await setDoc(doc(db, "users", cred.user.uid), {
         username,
         email,
-        avatar: null, // só pega o avatar quando entra/cria conta com o google
-        theme: "light",
+        avatar: null,
         notesCount: 0,
         favoritesCount: 0,
         createdAt: Date.now(),

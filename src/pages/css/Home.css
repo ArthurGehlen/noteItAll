@@ -12,7 +12,7 @@
 }
 
 .home_favorites {
-  height: 22rem;
+  height: fit-content;
   margin-bottom: 2rem;
   display: flex;
   flex-direction: column;

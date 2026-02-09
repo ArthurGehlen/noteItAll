@@ -26,6 +26,8 @@ import Note from "../components/UI/Note";
 
 // Hooks
 import { useEffect, useRef, useState } from "react";
+
+// Firestore
 import {
   collection,
   onSnapshot,

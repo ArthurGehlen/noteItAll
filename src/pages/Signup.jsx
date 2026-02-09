@@ -14,7 +14,7 @@ import logo from "../assets/logo.svg";
 import google_icon from "../assets/google_icon.svg";
 
 const Signup = () => {
-  const { signup_action } = useAuth();
+  const { signup_action, auth_with_google } = useAuth();
 
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
@@ -45,6 +45,15 @@ const Signup = () => {
     }
 
     navigate("/verify-email");
+  };
+
+  const handle_google_signup = async () => {
+    try {
+      await auth_with_google();
+    } catch (erro) {
+      setMessageType("danger");
+      setMessage(erro);
+    }
   };
 
   return (
@@ -99,7 +108,11 @@ const Signup = () => {
           Já possui uma conta? <Link to="/login">Entrar</Link>
         </p>
 
-        <button className="auth_social_btn">
+        <button
+          className="auth_social_btn"
+          onClick={handle_google_signup}
+          type="submit"
+        >
           <img src={google_icon} alt="icon" />
           <span>Entre com o Google</span>
         </button>
